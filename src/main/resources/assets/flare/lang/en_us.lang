@@ -1,0 +1,65 @@
+#PARSE_ESCAPES
+flare.message.monitoring_start.percentage_change=Starting now, any ticks with >%f %% increase in duration compared to the average will be reported.
+flare.message.monitoring_start.greater_duration=Starting now, any ticks with duration >%f will be reported.
+flare.message.tick_monitoring_start=Tick monitor started. Before the monitor becomes fully active, the server's average tick rate will be calculated over a period of 120 ticks (approx 6 seconds)."
+flare.message.tick_monitoring_end=§6Analysis is now complete.§r\n§f>§7 Max: %sms\n§f>§7 Min: %sms\n§f>§7 Average: %sms
+flare.message.tick_monitoring_report=§7Tick §8#%d §7lasted §6%s §7ms. (§6%s%% §7increased from average)
+flare.message.tick_monitoring_gc_report=§7Tick §8#%d §7included §4GC §7lasting §6%s §7ms. (Type = %s)
+flare.message.tps_statistics_recall=TPS from the last 5s, 10s, 1m, 5m, 15m:\n%s, %s, %s, %s, %s\n
+flare.message.tps_statistics_duration_averages=Tick durations (min/med/95%%ile/max ms) from the last 10s, 1m:\n%s ; %s\n
+flare.message.cpu_usage_system_load=CPU usage from the last 10s, 1m, 15m:\n%s, %s, %s  §8(system)\n
+flare.message.cpu_usage_process_load=CPU usage from the last 10s, 1m, 15m:\n%s, %s, %s  §8(process)\n
+flare.message.ping_statistics_specific_player=Player §b%s§r has %sms ping.
+flare.message.ping_statistics_averages=Average pings (min/med/95%%ile/max ms) from now and last 15m:\n%s ; %s
+flare.message.basic_memory_usage_report=§6Memory Usage:§r\n    §f%s§r §7/ §f%s§r   §7(§a%s§7)§r\n    %s
+flare.message.detailed_memory_usage_report=§6Non-Heap Memory Usage:§r\n    §f%s§r\n
+flare.message.memory_pool_report=§6%s Pool Usage:§r\n    §f%s§r §7/ §f%s§r    §7(§a%s§7)§r\n    %s
+flare.message.memory_pool_collection_usage_report=     §c- §7Usage at least GC §f%s
+flare.message.networking_report_header=§6Network Usage (system, last 15m):
+flare.message.networking_report_body=\n    %s §7/§r %s §7pps§r §8(§r%s %s§8)
+flare.message.disk_usage_report=§6Disk Usage:§r\n    §f%s§r §7/ §f%s§r    §7(§a%s§7)\n    %s
+flare.message.heap_summary_wait=Creating a new Heap Summary, please wait...
+flare.message.heap_summary_report=§6Heap Summary Report:\n§b%s
+flare.message.heap_summary_report_usage_hint=§7You can read the heap summary file using the viewer web-app - %s
+flare.message.heap_dump_wait=Creating a new Heap Dump, please wait...
+flare.message.heap_dump_report=§6Heap Dump Report:\n§b%s
+flare.message.compress_file_start=Compressing %s, please wait...
+flare.message.compress_file_progress=§7Compressed §6%s / %s §7so far... (§a%s%%§7)
+flare.message.compress_file_report=§7Compression complete: §6%s --> %s §7(§a%s%%§7)\n§6Compressed heap dump written to:\n§b%s
+flare.message.sampler_start=Sampler started!
+flare.message.sampler_info_start=No active sampler found, to start one run: /flare sampler start.
+flare.message.sampler_info_started=Active sampler found. Sampler has been running for %s.
+flare.message.sampler_info_view=To view the sampler while it is running, run: /flare sampler view.
+flare.message.sampler_info_stop=Since the sampler is running indefinitely, to stop the sampler, run: /flare sampler stop.
+flare.message.sampler_info_stopping=The sampler is due to stop in %s.
+flare.message.sampler_info_cancel=To cancel the sampler without the output of results, run: /flare sampler cancel.
+flare.message.sampler_cancelled=Cancelling Sampler!
+flare.message.sampler_stopping=Stopping Sampler...
+flare.message.sampler_saved_report=Sampler Report Saved: %s
+flare.message.sampler_uploaded_report=Sampler Report Uploaded: %s
+flare.message.sampler_viewer_open=Sampler's Live Viewer: %s
+flare.message.sampler_viewer_trust=Client connected to the live viewer using id [%s] is now trusted!
+
+flare.message.error=Errored LangKey Entry. Report on GitHub!
+
+flare.message.error.ping_statistics_singleplayer=§cPing statistics isn't applicable for Singleplayer!
+flare.message.error.ping_statistics_not_enough_data=§cThere isn't enough data to show ping averages yet. Please try again later.
+flare.message.error.inspecting_heap_unexpected_exception=§cAn error occurred whilst inspecting the heap.
+
+flare.message.sampler_already_started=Sampler is already active.
+flare.message.sampler_has_not_started=Sampler has not started yet.
+flare.message.sampler_start_timeout_too_short=Specified timeout is too short and would lead to inaccurate results. Please specify more than 10 seconds.
+flare.message.sampler_start_timeout_short=Specified timeout may lead to inaccurate results, 30 seconds or more will significantly improve accuracy of sampling results.
+flare.message.sampler_cannot_upload_report=Cannot upload sampler report! Error: %s (see console for more information). Attempting to save to disk instead.
+flare.message.sampler_failed_unexpectedly=Sampling operation failed unexpectedly! Error: %s (see console for more information)
+flare.message.sampler_viewer_unsupported=The live viewer is not supported in the current environment!
+flare.message.sampler_viewer_failed_unexpectedly=The live viewer failed unexpectedly Error: %s (see console for more information)
+flare.message.sampler_viewer_trust_id_not_found=Unable to find pending client with the id [%s]
+flare.message.sampler_viewer_id_not_provided=Please provide client id(s) with '--id <id>,<id2>'...
+
+flare.message.error.malformed_flags=Malformed flags used in conjunction with this command, these are the available flags: [%s]
+flare.message.error.malformed_inputs=Malformed inputs used in conjunction with the flag: [%s], please refer to the usages.
+flare.message.error.no_inputs=No inputs used in conjunction with the flag: [%s], please refer to the usages.
+flare.message.error.cannot_upload_save_to_disk_instead=§cAn error occurred whilst uploading the data. Attempting to save to disk instead.
+flare.message.error.cannot_save_to_disk=§cAn error occurred whilst saving the data.
+flare.message.error.cannot_compress_file=§cAn error occurred whilst compressing the file.

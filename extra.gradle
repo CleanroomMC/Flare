@@ -1,0 +1,21 @@
+// You may write any gradle buildscript component in this file
+// This file is automatically applied after build.gradle + dependencies.gradle is ran
+
+protobuf {
+    protoc {
+        if (System.getProperty("os.name") == "Mac OS X" && System.getProperty("os.arch") == "aarch64") {
+            path = '/opt/homebrew/bin/protoc'
+        } else {
+            artifact = 'com.google.protobuf:protoc:3.15.6'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
+}
