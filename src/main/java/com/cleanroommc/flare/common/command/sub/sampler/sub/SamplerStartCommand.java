@@ -110,17 +110,6 @@ public class SamplerStartCommand extends FlareSubCommand {
             }
             sampler = samplerBuilder.build();
             samplerContainer.setSampler(sampler);
-            sampler.whenComplete((s, t) -> {
-                samplerContainer.unsetSampler(s);
-                if (t != null) {
-                    sendMessage(sender, LangKeys.SAMPLER_FAILED_UNEXPECTEDLY, t.toString());
-                    this.flare.logger().fatal(t);
-                } else {
-                    sendMessage(sender, LangKeys.SAMPLER_STOPPING);
-                    SamplerUtil.upload(this.flare, samplerContainer.getExportProps(),
-                            (k, c, a) -> sendMessage(sender, k, c, a), s, true);
-                }
-            });
             sendMessage(sender, LangKeys.SAMPLER_START);
             sampler.start();
         }

@@ -1,21 +1,14 @@
 package com.cleanroommc.flare.common.command.sub.sampler.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
-import com.cleanroommc.flare.api.content.BytebinClient;
 import com.cleanroommc.flare.api.sampler.Sampler;
 import com.cleanroommc.flare.api.sampler.SamplerContainer;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
-import com.cleanroommc.flare.common.sampler.AbstractSampler;
 import com.cleanroommc.flare.common.sampler.ExportProps;
-import com.cleanroommc.flare.proto.FlareSamplerProtos;
 import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.ClickEvent.Action;
-
-import java.io.IOException;
 
 public class SamplerStopCommand extends FlareSubCommand {
 
@@ -46,7 +39,7 @@ public class SamplerStopCommand extends FlareSubCommand {
         if (sampler == null) {
             sendMessage(sender, LangKeys.SAMPLER_HAS_NOT_STARTED);
         } else if (this.cancel) {
-            sendMessage(sender, LangKeys.SAMPLER_CANCELLED);
+            sendMessage(sender, LangKeys.SAMPLER_CANCELLING);
             samplerContainer.stopSampler(true);
         } else {
             final String comment = getArgValue(args, "comment");
@@ -59,9 +52,13 @@ public class SamplerStopCommand extends FlareSubCommand {
                 exportProps.separateParentCalls(true);
             }
             try {
+                sendMessage(sender, LangKeys.SAMPLER_STOPPING);
                 samplerContainer.stopSampler(false);
+                samplerContainer.unsetSampler(sampler);
+                SamplerUtil.upload(this.flare, samplerContainer.getExportProps(), (k, c, a) -> sendMessage(sender, k, c, a), sampler, true);
             } catch (Throwable t) {
-                t.printStackTrace();
+                sendMessage(sender, LangKeys.SAMPLER_FAILED_UNEXPECTEDLY);
+                this.flare.logger().fatal(t);
             }
         }
     }

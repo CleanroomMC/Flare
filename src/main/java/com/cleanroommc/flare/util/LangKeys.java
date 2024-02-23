@@ -36,7 +36,7 @@ public enum LangKeys {
     SAMPLER_INFO_STOP("flare.message.sampler_info_stop", "Since the sampler is running indefinitely, to stop the sampler, run: /flare sampler stop."),
     SAMPLER_INFO_STOPPING("flare.message.sampler_info_stopping", "The sampler is due to stop in %s."),
     SAMPLER_INFO_CANCEL("flare.message.sampler_info_cancel", "To cancel the sampler without the output of results, run: /flare sampler cancel."),
-    SAMPLER_CANCELLED("flare.message.sampler_cancelled", "Cancelling Sampler!"),
+    SAMPLER_CANCELLING("flare.message.sampler_cancelling", "Cancelling Sampler!"),
     SAMPLER_STOPPING("flare.message.sampler_stopping", "Stopping Sampler..."),
     SAMPLER_SAVED_REPORT("flare.message.sampler_saved_report", "Sampler Report Saved: %s"),
     SAMPLER_UPLOADED_REPORT("flare.message.sampler_uploaded_report", "Sampler Report Uploaded: %s"),

@@ -119,10 +119,10 @@ public abstract class AbstractSampler implements Sampler {
 
     protected void sendStatisticsToSocket() {
         try {
+            this.viewerSockets.removeIf(socket -> !socket.isOpen());
             if (this.viewerSockets.isEmpty()) {
                 return;
             }
-            this.viewerSockets.removeIf(socket -> !socket.isOpen());
             PlatformStatistics platformStats = ProtoUtil.getPlatformStatsProto(this.flare, false, getInitialGcStats());
             SystemStatistics systemStats = ProtoUtil.getSystemStatsProto();
             for (ViewerSocket viewerSocket : this.viewerSockets) {

@@ -24,11 +24,12 @@ public class SamplerContainer<T extends Sampler> {
         this.activeSampler.compareAndSet(sampler, null);
     }
 
-    public void stopSampler(boolean cancelled) {
+    public T stopSampler(boolean cancelled) {
         T sampler = this.activeSampler.getAndSet(null);
         if (sampler != null) {
             sampler.stop(cancelled);
         }
+        return sampler;
     }
 
     public ExportProps getExportProps() {

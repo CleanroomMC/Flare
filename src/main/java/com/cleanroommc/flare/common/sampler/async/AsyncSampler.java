@@ -55,11 +55,6 @@ public class AsyncSampler extends AbstractSampler {
         return this.sampleCollector.mode();
     }
 
-    @Override
-    public void whenComplete(BiConsumer<Sampler, Throwable> biConsumer) {
-        this.future.whenCompleteAsync(biConsumer, this.scheduler);
-    }
-
     /**
      * Starts the profiler.
      */
