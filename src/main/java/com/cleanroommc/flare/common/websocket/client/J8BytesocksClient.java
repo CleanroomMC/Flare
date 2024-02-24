@@ -56,7 +56,7 @@ public class J8BytesocksClient implements BytesocksClient {
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", this.userAgent);
         if (con.getResponseCode() != 201) {
-            throw new RuntimeException("Request failed");
+            throw new RuntimeException(String.format("Request failed: %s [%s]", con.getResponseCode(), con.getResponseMessage()));
         }
 
         String channelId = null;

@@ -54,8 +54,7 @@ public class SamplerViewCommand extends FlareSubCommand {
                 exportProps.channelInfo(viewerSocket.getPayload());
 
                 String url = SamplerUtil.upload(this.flare, exportProps, sampler, true, false);
-                sendMessage(sender, LangKeys.SAMPLER_VIEWER_OPEN,
-                        msg -> msg.getStyle().setClickEvent(new ClickEvent(Action.OPEN_URL, url)), url);
+                sendMessage(sender, LangKeys.SAMPLER_VIEWER_OPEN, msg -> msg.getStyle().setClickEvent(new ClickEvent(Action.OPEN_URL, url)), url);
             } catch (Throwable t) {
                 sendMessage(sender, LangKeys.SAMPLER_VIEWER_FAILED_UNEXPECTEDLY, t.toString());
                 this.flare.logger().fatal(t);
