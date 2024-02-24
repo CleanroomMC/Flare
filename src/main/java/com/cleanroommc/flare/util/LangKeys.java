@@ -39,6 +39,7 @@ public enum LangKeys {
     SAMPLER_CANCELLING("flare.message.sampler_cancelling", "Cancelling Sampler!"),
     SAMPLER_STOPPING("flare.message.sampler_stopping", "Stopping Sampler..."),
     SAMPLER_SAVED_REPORT("flare.message.sampler_saved_report", "Sampler Report Saved: %s"),
+    SAMPLER_SAVED_REPORT_HINT("flare.message.sampler_saved_report_hint", "You can view the profile file using the web-app - %s"),
     SAMPLER_UPLOADED_REPORT("flare.message.sampler_uploaded_report", "Sampler Report Uploaded: %s"),
     SAMPLER_VIEWER_OPEN("flare.message.sampler_viewer_open", "Sampler's Live Viewer: %s"),
     SAMPLER_VIEWER_TRUST("flare.message.sampler_viewer_trust", "Client connected to the live viewer using id [%s] is now trusted!"),

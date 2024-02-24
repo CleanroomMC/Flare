@@ -36,6 +36,7 @@ flare.message.sampler_info_cancel=To cancel the sampler without the output of re
 flare.message.sampler_cancelling=Cancelling Sampler!
 flare.message.sampler_stopping=Stopping Sampler...
 flare.message.sampler_saved_report=Sampler Report Saved: %s
+flare.message.sampler_saved_report_hint=You can view the profile file using the web-app - %s
 flare.message.sampler_uploaded_report=Sampler Report Uploaded: %s
 flare.message.sampler_viewer_open=Sampler's Live Viewer: %s
 flare.message.sampler_viewer_trust=Client connected to the live viewer using id [%s] is now trusted!

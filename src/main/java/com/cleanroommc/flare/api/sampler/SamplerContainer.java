@@ -10,18 +10,18 @@ public class SamplerContainer<T extends Sampler> {
 
     protected ExportProps exportProps = new ExportProps();
 
+    public boolean isSamplerActive() {
+        return this.activeSampler.get() != null;
+    }
+
     public Sampler activeSampler() {
-        return activeSampler.get();
+        return this.activeSampler.get();
     }
 
     public void setSampler(T sampler) {
         if (!this.activeSampler.compareAndSet(null, sampler)) {
             throw new IllegalStateException("Attempted to set active sampler when another was already active!");
         }
-    }
-
-    public void unsetSampler(T sampler) {
-        this.activeSampler.compareAndSet(sampler, null);
     }
 
     public T stopSampler(boolean cancelled) {

@@ -35,15 +35,15 @@ public class SamplerStopCommand extends FlareSubCommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         SamplerContainer<Sampler> samplerContainer = this.flare.samplerContainer();
-        Sampler sampler = samplerContainer.activeSampler();
-        if (sampler == null) {
-            sendMessage(sender, LangKeys.SAMPLER_HAS_NOT_STARTED);
-        } else if (this.cancel) {
-            sendMessage(sender, LangKeys.SAMPLER_CANCELLING);
-            samplerContainer.stopSampler(true);
-        } else {
+        if (samplerContainer.isSamplerActive()) {
+            if (this.cancel) {
+                sendMessage(sender, LangKeys.SAMPLER_CANCELLING);
+                samplerContainer.stopSampler(true);
+                return;
+            }
             final String comment = getArgValue(args, "comment");
             final boolean separateParentCalls = hasArg(args, "separate-parent-calls");
+            final boolean saveToFile = hasArg(args, "save-to-file");
             ExportProps exportProps = samplerContainer.getExportProps();
             if (comment != null) {
                 exportProps.comment(comment);
@@ -51,15 +51,19 @@ public class SamplerStopCommand extends FlareSubCommand {
             if (separateParentCalls && !exportProps.separateParentCalls()) {
                 exportProps.separateParentCalls(true);
             }
+            if (saveToFile) {
+                exportProps.saveToFile(true);
+            }
             try {
                 sendMessage(sender, LangKeys.SAMPLER_STOPPING);
-                samplerContainer.stopSampler(false);
-                samplerContainer.unsetSampler(sampler);
+                Sampler sampler = samplerContainer.stopSampler(false);
                 SamplerUtil.upload(this.flare, samplerContainer.getExportProps(), (k, c, a) -> sendMessage(sender, k, c, a), sampler, true);
             } catch (Throwable t) {
                 sendMessage(sender, LangKeys.SAMPLER_FAILED_UNEXPECTEDLY);
                 this.flare.logger().fatal(t);
             }
+        } else {
+            sendMessage(sender, LangKeys.SAMPLER_HAS_NOT_STARTED);
         }
     }
 
