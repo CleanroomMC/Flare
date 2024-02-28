@@ -2,6 +2,7 @@ package com.cleanroommc.flare.core;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.FlareClientAPI;
+import com.cleanroommc.flare.api.activity.ActivityLog;
 import com.cleanroommc.flare.api.content.BytebinClient;
 import com.cleanroommc.flare.api.metadata.MetadataProvider;
 import com.cleanroommc.flare.api.ping.PingStatistics;
@@ -15,6 +16,7 @@ import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper.GameThread;
 import com.cleanroommc.flare.api.tick.TickRoutine;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.common.activity.FlareActivityLog;
 import com.cleanroommc.flare.common.component.ping.FlarePingStatistics;
 import com.cleanroommc.flare.common.component.tick.FlareTickRoutine;
 import com.cleanroommc.flare.common.component.tick.FlareTickStatistics;
@@ -56,6 +58,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
     private final BytesocksClient bytesocksClient;
 
     private final Path saveDirectory;
+    private final ActivityLog activityLog;
 
     private ExecutorService asyncExecutor;
     private long serverStartTime = -1L;
@@ -65,6 +68,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
 
     Flare(Path saveDirectory) {
         this.saveDirectory = saveDirectory;
+        this.activityLog = new FlareActivityLog(this.saveDirectory);
         // this.bytesocksClient = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9) ? ... :
         this.bytesocksClient = J8BytesocksClient.create("spark-usersockets.lucko.me", "spark-plugin");
         this.objects.put(BytesocksClient.class, this.bytesocksClient);
@@ -87,6 +91,11 @@ public class Flare implements FlareAPI, FlareClientAPI {
     @Override
     public Path saveDirectory() {
         return saveDirectory;
+    }
+
+    @Override
+    public ActivityLog activityLog() {
+        return activityLog;
     }
 
     @Override

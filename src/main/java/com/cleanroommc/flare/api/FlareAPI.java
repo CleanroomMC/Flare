@@ -1,5 +1,6 @@
 package com.cleanroommc.flare.api;
 
+import com.cleanroommc.flare.api.activity.ActivityLog;
 import com.cleanroommc.flare.api.content.BytebinClient;
 import com.cleanroommc.flare.api.context.FlareServerContext;
 import com.cleanroommc.flare.api.metadata.MetadataProvider;
@@ -68,6 +69,8 @@ public interface FlareAPI extends FlareServerContext {
     Logger logger();
 
     Path saveDirectory();
+
+    ActivityLog activityLog();
 
     String viewerUrl();
 
