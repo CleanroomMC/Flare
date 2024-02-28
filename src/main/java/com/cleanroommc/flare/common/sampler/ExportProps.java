@@ -3,6 +3,7 @@ package com.cleanroommc.flare.common.sampler;
 import com.cleanroommc.flare.api.sampler.node.MethodDescriptorResolver;
 import com.cleanroommc.flare.api.sampler.source.ClassSourceLookup;
 import com.cleanroommc.flare.proto.FlareSamplerProtos;
+import com.cleanroommc.flare.util.DummyCommandSender;
 import net.minecraft.command.ICommandSender;
 
 import java.lang.ref.WeakReference;
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
 
 public class ExportProps {
 
-    private WeakReference<ICommandSender> creator;
+    private WeakReference<ICommandSender> creator = new WeakReference<>(new DummyCommandSender());
     private String comment;
     private Supplier<ClassSourceLookup> classSourceLookup;
     private FlareSamplerProtos.SocketChannelInfo channelInfo;

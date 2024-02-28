@@ -58,9 +58,15 @@ flare.message.sampler_viewer_failed_unexpectedly=The live viewer failed unexpect
 flare.message.sampler_viewer_trust_id_not_found=Unable to find pending client with the id [%s]
 flare.message.sampler_viewer_id_not_provided=Please provide client id(s) with '--id <id>,<id2>'...
 
+flare.message.tracker.not_enabled=The tracker is not enabled! Please run the command first!
+
 flare.message.error.malformed_flags=Malformed flags used in conjunction with this command, these are the available flags: [%s]
 flare.message.error.malformed_inputs=Malformed inputs used in conjunction with the flag: [%s], please refer to the usages.
 flare.message.error.no_inputs=No inputs used in conjunction with the flag: [%s], please refer to the usages.
 flare.message.error.cannot_upload_save_to_disk_instead=§cAn error occurred whilst uploading the data. Attempting to save to disk instead.
 flare.message.error.cannot_save_to_disk=§cAn error occurred whilst saving the data.
 flare.message.error.cannot_compress_file=§cAn error occurred whilst compressing the file.
+
+flare.misc.tracker.entity=Entity
+flare.misc.tracker.tile_entity=Tile Entity
+flare.misc.tracker.information=%s | Position: x%s, y%s, z%s | Tick Time: %s

@@ -1,5 +1,9 @@
 package com.cleanroommc.flare.util;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public enum LangKeys {
 
     // Modules
@@ -66,6 +70,10 @@ public enum LangKeys {
     SAMPLER_VIEWER_TRUST_ID_NOT_FOUND("flare.message.sampler_viewer_trust_id_not_found", "Unable to find pending client with the id [%s]"),
     SAMPLER_VIEWER_ID_NOT_PROVIDED("flare.message.sampler_viewer_id_not_provided", "Please provide client id(s) with '--id <id>,<id2>...'"),
 
+    // Tracker
+    TRACKER_NOT_ENABLED("flare.message.tracker.not_enabled", "The tracker is not enabled! Please run the command first!"),
+    TRACKER_INFORMATION("flare.misc.tracker.information", "%s | Position: : x%s, y%s, z%s | Tick Time: %s"),
+
     // General Exceptions
     ERROR("flare.message.error", "Errored LangKey Entry. Report on GitHub!"),
     MALFORMED_FLAGS("flare.message.error.malformed_flags", "Malformed flags used in conjunction with this command, these are the available flags: [%s]"),
@@ -82,6 +90,11 @@ public enum LangKeys {
     LangKeys(String langKey, String defaultText) {
         this.langKey = langKey;
         this.defaultText = defaultText;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String translate(Object... objects) {
+        return I18n.format(this.langKey, objects);
     }
 
 }

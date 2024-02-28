@@ -20,6 +20,8 @@ public final class FlareKeybindings {
     private static final KeyBinding START_CLIENT_SAMPLING_KEY = new KeyBinding("flare.key.start_client_sampling", 0, "flare.key.category");
     @SideOnly(Side.CLIENT)
     private static final KeyBinding STOP_CLIENT_SAMPLING_KEY = new KeyBinding("flare.key.stop_client_sampling", 0, "flare.key.category");
+    @SideOnly(Side.CLIENT)
+    private static final KeyBinding OPEN_TICK_TRACKING_MENU = new KeyBinding("flare.key.open_tick_tracking_menu", 0, "flare.key.category");
 
     static FlareAPI flare;
 
@@ -30,6 +32,7 @@ public final class FlareKeybindings {
         ClientRegistry.registerKeyBinding(STOP_SAMPLING_KEY);
         ClientRegistry.registerKeyBinding(START_CLIENT_SAMPLING_KEY);
         ClientRegistry.registerKeyBinding(STOP_CLIENT_SAMPLING_KEY);
+        ClientRegistry.registerKeyBinding(OPEN_TICK_TRACKING_MENU);
     }
 
     @SideOnly(Side.CLIENT)
@@ -50,6 +53,11 @@ public final class FlareKeybindings {
     @SideOnly(Side.CLIENT)
     static boolean stopClientSampling() {
         return STOP_CLIENT_SAMPLING_KEY.isPressed();
+    }
+
+    @SideOnly(Side.CLIENT)
+    static boolean openTickTrackingMenu() {
+        return OPEN_TICK_TRACKING_MENU.isPressed();
     }
 
     @SideOnly(Side.CLIENT)

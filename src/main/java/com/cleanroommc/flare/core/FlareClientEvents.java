@@ -1,5 +1,7 @@
 package com.cleanroommc.flare.core;
 
+import com.cleanroommc.flare.client.tracker.GuiSelection;
+import com.cleanroommc.flare.client.tracker.GuiTickList;
 import com.cleanroommc.flare.util.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ChatType;
@@ -41,6 +43,9 @@ public final class FlareClientEvents {
             Minecraft.getMinecraft().player.sendChatMessage("/flare sampler start --client");
         } else if (FlareKeybindings.stopSampling() || FlareKeybindings.stopClientSampling()) {
             Minecraft.getMinecraft().player.sendChatMessage("/flare sampler stop");
+        }
+        if (FlareKeybindings.openTickTrackingMenu()) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiSelection());
         }
     }
 
