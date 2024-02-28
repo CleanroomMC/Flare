@@ -117,8 +117,8 @@ public class ViewerSocket implements ViewerSocketConnection.Listener, AutoClosea
             log("Sending updated sampler data.");
             String key = this.flare.bytebinClient().postContent(BytebinClient.FLARE_SAMPLER_MEDIA_TYPE, "live", samplerData);
             sendUpdatedSamplerData(key);
-        } catch (Exception e) {
-            this.flare.logger().warn("Error whilst sending updated sampler data to the socket.", e);
+        } catch (Throwable t) {
+            this.flare.logger().warn("Error whilst sending updated sampler data to the socket.", t);
         }
     }
 

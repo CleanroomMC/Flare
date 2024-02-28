@@ -1,11 +1,11 @@
 package com.cleanroommc.flare.api.content;
 
+import com.cleanroommc.flare.api.util.ThrowingConsumer;
 import com.google.protobuf.AbstractMessageLite;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.zip.GZIPOutputStream;
 
 public interface BytebinClient {
@@ -18,27 +18,25 @@ public interface BytebinClient {
 
     int DEFAULT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
 
-    String postContent(String contentType, String userAgentAddition, Consumer<OutputStream> outputStreamConsumer) throws IOException;
+    String postContent(String contentType, String userAgentAddition, ThrowingConsumer<OutputStream> outputStreamConsumer) throws Throwable;
 
     String bytebinUrl();
 
     String userAgent();
 
-    default String postContent(String contentType, Consumer<OutputStream> outputStreamConsumer) throws IOException {
+    default String postContent(String contentType, ThrowingConsumer<OutputStream> outputStreamConsumer) throws Throwable {
         return postContent(contentType, null, outputStreamConsumer);
     }
 
-    default String postContent(String contentType, String userAgentAddition, AbstractMessageLite<?, ?> proto) throws IOException {
+    default String postContent(String contentType, String userAgentAddition, AbstractMessageLite<?, ?> proto) throws Throwable {
         return postContent(contentType, userAgentAddition, outputStream -> {
             try (OutputStream out = new GZIPOutputStream(outputStream)) {
                 proto.writeTo(out);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         });
     }
 
-    default String postContent(String contentType, AbstractMessageLite<?, ?> proto) throws IOException {
+    default String postContent(String contentType, AbstractMessageLite<?, ?> proto) throws Throwable {
         return postContent(contentType, null, proto);
     }
 

@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.content;
 
 import com.cleanroommc.flare.api.content.BytebinClient;
+import com.cleanroommc.flare.api.util.ThrowingConsumer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 public class FlareBytebinClient implements BytebinClient {
 
     @Override
-    public String postContent(String contentType, String userAgentAddition, Consumer<OutputStream> outputStreamConsumer) throws IOException {
+    public String postContent(String contentType, String userAgentAddition, ThrowingConsumer<OutputStream> outputStreamConsumer) throws Throwable {
         URL url = new URL(this.bytebinUrl() + "post");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         String userAgent = userAgentAddition == null ? this.userAgent() : this.userAgent() + "/" + userAgentAddition;

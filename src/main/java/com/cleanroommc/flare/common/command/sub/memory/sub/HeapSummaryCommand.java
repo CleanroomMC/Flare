@@ -56,9 +56,9 @@ public class HeapSummaryCommand extends FlareSubCommand {
                 String url = this.flare.viewerUrl() + key;
                 sendMessage(sender, LangKeys.HEAP_SUMMARY_REPORT,
                         text -> text.getStyle().setClickEvent(new ClickEvent(Action.OPEN_URL, url)), url);
-            } catch (Exception e) {
+            } catch (Throwable t) {
                 sendMessage(sender, LangKeys.CANNOT_UPLOAD_SAVE_TO_DISK_INSTEAD);
-                e.printStackTrace();
+                this.flare.logger().fatal(t);
                 saveLocally = true;
             }
         }
