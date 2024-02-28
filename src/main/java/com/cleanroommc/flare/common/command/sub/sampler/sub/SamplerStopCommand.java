@@ -57,7 +57,7 @@ public class SamplerStopCommand extends FlareSubCommand {
             try {
                 sendMessage(sender, LangKeys.SAMPLER_STOPPING);
                 Sampler sampler = samplerContainer.stopSampler(false);
-                SamplerUtil.upload(this.flare, samplerContainer.getExportProps(), (k, c, a) -> sendMessage(sender, k, c, a), sampler, true);
+                SamplerUtil.upload(this.flare, samplerContainer.getExportProps(), (k, c, a) -> sendMessage(sender, k, c, a), sampler, false, true);
             } catch (Throwable t) {
                 sendMessage(sender, LangKeys.SAMPLER_FAILED_UNEXPECTEDLY);
                 this.flare.logger().fatal(t);

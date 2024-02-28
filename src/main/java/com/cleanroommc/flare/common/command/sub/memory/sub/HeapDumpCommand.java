@@ -44,10 +44,11 @@ public class HeapDumpCommand extends FlareSubCommand {
         Path heapDumpDir = this.flare.saveDirectory().resolve("heap/dump");
         String fileName = new SimpleDateFormat("yyyy-MM-dd-hh_mm").format(new Date()) + (HeapDump.isOpenJ9() ? ".phd" : ".hprof");
         Path heapDumpFile = heapDumpDir.resolve(fileName);
+        sendMessage(sender, LangKeys.HEAP_DUMP_WAIT);
         try {
             Files.createDirectories(heapDumpDir);
             HeapDump.dumpHeap(heapDumpFile, !hasArg(args, "include-non-live"));
-            sendMessage(sender, LangKeys.HEAP_SUMMARY_REPORT, text ->
+            sendMessage(sender, LangKeys.HEAP_DUMP_REPORT, text ->
                 text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, heapDumpFile.toAbsolutePath().toString())), heapDumpFile.getFileName());
         } catch (Exception e) {
             sendMessage(sender, LangKeys.INSPECTING_HEAP_UNEXPECTED_EXCEPTION);
