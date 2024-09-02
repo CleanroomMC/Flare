@@ -1,8 +1,11 @@
 package com.cleanroommc.flare.util;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Set;
 
 public enum LangKeys {
 
@@ -84,6 +87,18 @@ public enum LangKeys {
     CANNOT_COMPRESS_FILE("flare.message.error.cannot_compress_file", "An error occurred whilst compressing the file.")
 
     ;
+
+    private static final Set<String> KEYS = new ObjectOpenHashSet<>();
+
+    static {
+        for (LangKeys langkey : LangKeys.values()) {
+            KEYS.add(langkey.langKey);
+        }
+    }
+
+    public static boolean isFlareLangKey(String langKey) {
+        return KEYS.contains(langKey);
+    }
 
     final String langKey, defaultText;
 

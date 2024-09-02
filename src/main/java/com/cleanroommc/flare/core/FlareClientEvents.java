@@ -27,7 +27,7 @@ public final class FlareClientEvents {
         if (event.getType() == ChatType.SYSTEM) {
             ITextComponent message = event.getMessage();
             if (message instanceof TextComponentTranslation) {
-                if (((TextComponentTranslation) message).getKey().startsWith("flare.")) {
+                if (LangKeys.isFlareLangKey(((TextComponentTranslation) message).getKey())) {
                     event.setMessage(ChatUtil.prefix(message));
                 }
             }
