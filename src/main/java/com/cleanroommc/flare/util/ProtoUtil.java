@@ -64,6 +64,9 @@ public final class ProtoUtil {
     }
 
     public static CommandSenderMetadata getCommandSenderProto(ICommandSender sender) {
+        if (sender == null) {
+            sender = new DummyCommandSender();
+        }
         return CommandSenderMetadata.newBuilder()
                 .setName(sender.getName())
                 .setType(sender instanceof EntityPlayer ? CommandSenderMetadata.Type.PLAYER : CommandSenderMetadata.Type.OTHER)

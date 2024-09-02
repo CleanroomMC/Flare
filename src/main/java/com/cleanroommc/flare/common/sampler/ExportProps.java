@@ -3,7 +3,6 @@ package com.cleanroommc.flare.common.sampler;
 import com.cleanroommc.flare.api.sampler.node.MethodDescriptorResolver;
 import com.cleanroommc.flare.api.sampler.source.ClassSourceLookup;
 import com.cleanroommc.flare.proto.FlareSamplerProtos;
-import com.cleanroommc.flare.util.DummyCommandSender;
 import net.minecraft.command.ICommandSender;
 
 import java.lang.ref.WeakReference;
@@ -11,7 +10,7 @@ import java.util.function.Supplier;
 
 public class ExportProps {
 
-    private WeakReference<ICommandSender> creator = new WeakReference<>(new DummyCommandSender());
+    private WeakReference<ICommandSender> creator;
     private String comment;
     private Supplier<ClassSourceLookup> classSourceLookup;
     private FlareSamplerProtos.SocketChannelInfo channelInfo;
@@ -20,18 +19,18 @@ public class ExportProps {
 
     public ExportProps copy() {
         return new ExportProps()
-                .creator(this.creator.get())
-                .comment(this.comment)
-                .classSourceLookup(this.classSourceLookup)
-                .channelInfo(this.channelInfo)
-                .resolver(this.resolver)
-                .separateParentCalls(this.separateParentCalls)
-                .saveToFile(this.saveToFile);
+                .creator(this.creator())
+                .comment(this.comment())
+                .classSourceLookup(this.classSourceLookup())
+                .channelInfo(this.channelInfo())
+                .resolver(this.resolver())
+                .separateParentCalls(this.separateParentCalls())
+                .saveToFile(this.saveToFile());
 
     }
 
     public ICommandSender creator() {
-        return this.creator.get();
+        return this.creator == null ? null : this.creator.get();
     }
 
     public String comment() {
