@@ -1,8 +1,8 @@
 package com.cleanroommc.flare.core;
 
 import com.cleanroommc.flare.client.tracker.GuiSelection;
-import com.cleanroommc.flare.client.tracker.GuiTickList;
 import com.cleanroommc.flare.util.ChatUtil;
+import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
