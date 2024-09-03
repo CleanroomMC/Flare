@@ -321,4 +321,5 @@ idea.project.settings {
     }
 }
 
+apply from: 'gradle/scripts/publishing.gradle'
 apply from: 'gradle/scripts/extra.gradle'
