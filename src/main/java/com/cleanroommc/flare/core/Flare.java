@@ -25,9 +25,10 @@ import com.cleanroommc.flare.common.sampler.FlareSamplerBuilder;
 import com.cleanroommc.flare.common.sampler.source.FlareClassSourceLookup;
 import com.cleanroommc.flare.common.websocket.TrustedKeyStore;
 import com.cleanroommc.flare.common.websocket.client.J8BytesocksClient;
+import com.cleanroommc.flare.core.mixin.MinecraftAccessor;
+import com.cleanroommc.flare.core.mixin.MinecraftServerAccessor;
 import com.cleanroommc.flare.util.FlareMethodDescriptorResolver;
 import com.cleanroommc.flare.util.FlareThreadFactory;
-import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import me.lucko.bytesocks.client.BytesocksClient;
 import net.minecraft.client.Minecraft;
@@ -38,7 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -116,16 +116,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
     @Override
     public ThreadDumper serverThreadDumper() {
         if (this.serverThread == null) {
-            this.serverThread = new GameThread(Suppliers.memoize(() -> {
-                try {
-                    Field minecraftServer$serverThread = MinecraftServer.class.getDeclaredField("serverThread");
-                    minecraftServer$serverThread.setAccessible(true);
-                    return (Thread) minecraftServer$serverThread.get(server());
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-                return null;
-            }));
+            this.serverThread = new GameThread(() -> ((MinecraftServerAccessor) server()).flare$getServerThread());
         }
         return this.serverThread.get();
     }
@@ -222,16 +213,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
     @SideOnly(Side.CLIENT)
     public ThreadDumper clientThreadDumper() {
         if (this.clientThread == null) {
-            this.clientThread = new GameThread(Suppliers.memoize(() -> {
-                try {
-                    Field minecraft$thread = Minecraft.class.getDeclaredField("thread");
-                    minecraft$thread.setAccessible(true);
-                    return (Thread) minecraft$thread.get(Minecraft.getMinecraft());
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-                return null;
-            }));
+            this.clientThread = new GameThread(() -> ((MinecraftAccessor) Minecraft.getMinecraft()).flare$getThread());
         }
         return this.clientThread.get();
     }
