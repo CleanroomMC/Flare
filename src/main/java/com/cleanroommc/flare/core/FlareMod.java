@@ -2,18 +2,19 @@ package com.cleanroommc.flare.core;
 
 import com.cleanroommc.flare.Tags;
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.client.command.FlareClientCommand;
 import com.cleanroommc.flare.common.command.FlareCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.common.component.network.NetworkMonitor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.FMLFileResourcePack;
-import net.minecraftforge.fml.common.DummyModContainer;
-import net.minecraftforge.fml.common.LoadController;
-import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
@@ -59,7 +60,10 @@ public class FlareMod extends DummyModContainer {
 
     @Subscribe
     public void onServerStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new FlareCommand(FlareAPI.getInstance()));
+        if (FMLLaunchHandler.side().isClient()) {
+            ClientCommandHandler.instance.registerCommand(new FlareClientCommand(FlareAPI.getInstance()));
+        }
+        event.registerServerCommand(new FlareCommand(FlareAPI.getInstance(), Side.SERVER));
     }
 
     @Subscribe

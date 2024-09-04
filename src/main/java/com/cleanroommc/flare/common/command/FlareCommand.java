@@ -7,11 +7,12 @@ import com.cleanroommc.flare.common.command.sub.component.tick.TPSCommand;
 import com.cleanroommc.flare.common.command.sub.memory.HeapTreeCommand;
 import com.cleanroommc.flare.common.command.sub.sampler.SamplerTreeCommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 public class FlareCommand extends CommandTreeBase {
 
-    public FlareCommand(FlareAPI flare) {
+    public FlareCommand(FlareAPI flare, Side side) {
         // Tree
         addSubcommand(new HeapTreeCommand(flare));
         addSubcommand(new SamplerTreeCommand(flare));
