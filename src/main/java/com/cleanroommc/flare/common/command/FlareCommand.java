@@ -15,7 +15,7 @@ public class FlareCommand extends CommandTreeBase {
     public FlareCommand(FlareAPI flare, Side side) {
         // Tree
         addSubcommand(new HeapTreeCommand(flare));
-        addSubcommand(new SamplerTreeCommand(flare));
+        addSubcommand(new SamplerTreeCommand(side, flare));
 
         // Leaves
         addSubcommand(new HealthCommand(flare));

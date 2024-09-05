@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.command.sub.sampler.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.api.FlareClientAPI;
 import com.cleanroommc.flare.api.sampler.Sampler;
 import com.cleanroommc.flare.api.sampler.SamplerBuilder;
 import com.cleanroommc.flare.api.sampler.SamplerContainer;
@@ -13,14 +14,18 @@ import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SamplerStartCommand extends FlareSubCommand {
 
-    public SamplerStartCommand(FlareAPI flare) {
+    private final Side side;
+
+    public SamplerStartCommand(Side side, FlareAPI flare) {
         super(flare);
+        this.side = side;
     }
 
     @Override
@@ -65,9 +70,11 @@ public class SamplerStartCommand extends FlareSubCommand {
             Set<String> threads = getArgValues(args, "thread");
             ThreadDumper threadDumper;
             if (threads.isEmpty()) {
-                // Use the main thread
-                // TODO: when calling /flarec, configure to use client thread dumper
-                threadDumper = this.flare.serverThreadDumper();
+                if (this.side.isClient()) {
+                    threadDumper = ((FlareClientAPI) this.flare).clientThreadDumper();
+                } else {
+                    threadDumper = this.flare.serverThreadDumper();
+                }
             } else if (threads.contains("*")) {
                 threadDumper = ThreadDumper.ALL;
             } else {

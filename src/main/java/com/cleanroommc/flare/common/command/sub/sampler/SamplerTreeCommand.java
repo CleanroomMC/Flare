@@ -3,13 +3,14 @@ package com.cleanroommc.flare.common.command.sub.sampler;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.common.command.sub.sampler.sub.*;
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 // TODO: client overload
 public class SamplerTreeCommand extends CommandTreeBase {
 
-    public SamplerTreeCommand(FlareAPI flare) {
-        addSubcommand(new SamplerStartCommand(flare));
+    public SamplerTreeCommand(Side side, FlareAPI flare) {
+        addSubcommand(new SamplerStartCommand(side, flare));
         addSubcommand(new SamplerInfoCommand(flare));
         // TODO: addSubcommand(new SamplerUploadCommand(flare));
         addSubcommand(new SamplerViewCommand(flare));
