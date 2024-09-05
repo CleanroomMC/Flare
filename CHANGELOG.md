@@ -1,3 +1,9 @@
+## [0.2.0] - 2024-09-05
+
+### Added
+- /flarec (client-side) commands
+- Client-sided profiling
+
 ## [0.1.1] - 2024-09-03
 
 ### Fixed
