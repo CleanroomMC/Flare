@@ -1,3 +1,9 @@
+## [0.2.1] - 2024-09-05
+
+### Fixed
+- Crashes in Cleanroom environment due to path issues
+- Ingame file paths not being correct
+
 ## [0.2.0] - 2024-09-05
 
 ### Added
