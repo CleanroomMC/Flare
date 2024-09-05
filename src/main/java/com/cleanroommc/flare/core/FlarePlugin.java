@@ -11,6 +11,7 @@ import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class FlarePlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     static File source;
 
     public FlarePlugin() {
-        Flare flare = new Flare(Launch.minecraftHome.toPath().resolve("config/" + Tags.MOD_ID));
+        Flare flare = new Flare(Paths.get(".").resolve("config").resolve(Tags.MOD_ID).normalize());
         Launch.blackboard.put("MainFlareInstance", flare);
 
         if (FlareConfiguration.isStageOn(SamplingStage.GAME_LOAD)) {

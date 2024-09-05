@@ -41,7 +41,7 @@ public class HeapDumpCommand extends FlareSubCommand {
         if (hasArg(args, "run-gc-first")) {
             System.gc();
         }
-        Path heapDumpDir = this.flare.saveDirectory().resolve("heap/dump");
+        Path heapDumpDir = this.flare.saveDirectory().resolve("heap").resolve("dump");
         String fileName = new SimpleDateFormat("yyyy-MM-dd-hh_mm").format(new Date()) + (HeapDump.isOpenJ9() ? ".phd" : ".hprof");
         Path heapDumpFile = heapDumpDir.resolve(fileName);
         sendMessage(sender, LangKeys.HEAP_DUMP_WAIT);
@@ -49,7 +49,8 @@ public class HeapDumpCommand extends FlareSubCommand {
             Files.createDirectories(heapDumpDir);
             HeapDump.dumpHeap(heapDumpFile, !hasArg(args, "include-non-live"));
             sendMessage(sender, LangKeys.HEAP_DUMP_REPORT, text ->
-                text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, heapDumpFile.toAbsolutePath().toString())), heapDumpFile.getFileName());
+                text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, heapDumpFile.toFile().getAbsolutePath())),
+                    heapDumpFile.getFileName());
         } catch (Exception e) {
             sendMessage(sender, LangKeys.INSPECTING_HEAP_UNEXPECTED_EXCEPTION);
             e.printStackTrace();

@@ -64,12 +64,12 @@ public class HeapSummaryCommand extends FlareSubCommand {
         }
         if (saveLocally) {
             try {
-                Path heapSummaryDir = this.flare.saveDirectory().resolve("heap/summary");
+                Path heapSummaryDir = this.flare.saveDirectory().resolve("heap").resolve("summary");
                 Files.createDirectories(heapSummaryDir);
                 Path heapSummaryFile = heapSummaryDir.resolve(new SimpleDateFormat("yyyy-MM-dd-hh_mm'.sparkheap'").format(new Date()));
                 Files.write(heapSummaryFile, heapData.toByteArray());
                 sendMessage(sender, LangKeys.HEAP_SUMMARY_REPORT, text -> text.getStyle().setClickEvent(
-                        new ClickEvent(Action.OPEN_FILE, heapSummaryFile.toAbsolutePath().toString())),
+                        new ClickEvent(Action.OPEN_FILE, heapSummaryFile.toFile().getAbsolutePath())),
                         heapSummaryFile.getFileName());
                 sendMessage(sender, LangKeys.HEAP_SUMMARY_REPORT_USAGE_HINT, this.flare.viewerUrl());
             } catch (IOException e) {
