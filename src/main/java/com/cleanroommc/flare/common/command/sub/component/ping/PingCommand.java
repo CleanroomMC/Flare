@@ -70,8 +70,8 @@ public class PingCommand extends FlareSubCommand {
                     return;
                 }
                 sendMessage(sender, LangKeys.PING_STATISTICS_AVERAGES,
-                        StatisticFormatter.formatPingRtts(summary.min(), summary.median(), summary.percentile95th(), summary.max()),
-                        StatisticFormatter.formatPingRtts(average.min(), average.median(), average.percentile95th(), average.max()));
+                        StatisticFormatter.formatPingRtts(average.min(), average.median(), average.percentile95th(), average.max()),
+                        StatisticFormatter.formatPingRtts(summary.min(), summary.median(), summary.percentile95th(), summary.max()));
             }
         }
     }
