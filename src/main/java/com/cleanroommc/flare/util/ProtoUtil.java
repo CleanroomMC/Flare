@@ -67,10 +67,13 @@ public final class ProtoUtil {
         if (sender == null) {
             sender = new DummyCommandSender();
         }
-        return CommandSenderMetadata.newBuilder()
-                .setName(sender.getName())
-                .setType(sender instanceof EntityPlayer ? CommandSenderMetadata.Type.PLAYER : CommandSenderMetadata.Type.OTHER)
-                .setUniqueId(sender instanceof EntityPlayer ? ((EntityPlayer) sender).getUniqueID().toString() : null).build();
+        CommandSenderMetadata .Builder builder = CommandSenderMetadata.newBuilder().setName(sender.getName());
+        if (sender instanceof EntityPlayer) {
+            builder.setType(CommandSenderMetadata.Type.PLAYER).setUniqueId(((EntityPlayer) sender).getUniqueID().toString());
+        } else {
+            builder.setType(CommandSenderMetadata.Type.OTHER);
+        }
+        return builder.build();
     }
 
     public static PlatformStatistics getPlatformStatsProto(FlareAPI flare, boolean includeWorld,

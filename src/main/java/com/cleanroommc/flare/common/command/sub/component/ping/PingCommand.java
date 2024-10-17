@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -41,7 +42,7 @@ public class PingCommand extends FlareSubCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (server instanceof IntegratedServer && !((IntegratedServer) server).getPublic()) {
+        if (FMLLaunchHandler.side().isClient() && server instanceof IntegratedServer && !((IntegratedServer) server).getPublic()) {
             sendMessage(sender, LangKeys.PING_STATISTICS_SINGLEPLAYER);
         } else {
             PingStatistics stats = this.flare.pingStats();
