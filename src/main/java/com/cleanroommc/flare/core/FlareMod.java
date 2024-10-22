@@ -11,6 +11,7 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.FMLFileResourcePack;
 import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -59,10 +60,14 @@ public class FlareMod extends DummyModContainer {
     }
 
     @Subscribe
-    public void onServerStarting(FMLServerStartingEvent event) {
-        if (FMLLaunchHandler.side().isClient()) {
+    public void postInit(FMLPostInitializationEvent event) {
+        if (event.getSide().isClient()) {
             ClientCommandHandler.instance.registerCommand(new FlareClientCommand(FlareAPI.getInstance()));
         }
+    }
+
+    @Subscribe
+    public void onServerStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new FlareCommand(FlareAPI.getInstance(), Side.SERVER));
     }
 
