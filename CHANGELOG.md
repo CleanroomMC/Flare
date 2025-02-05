@@ -1,3 +1,17 @@
+# Changelog
+
+## [0.3.0] - 2025-02-05
+
+### Added
+- Default sampler configurations
+
+### Fixed
+- Issues relating to dedicated server environments
+- Typos on average/summary timings messages
+- Configuration for stages profiling not working (Thanks CaliforniaDemise)
+- Typo on location for async profiler libraries
+- Activity logging
+
 ## [0.2.1] - 2024-09-05
 
 ### Fixed
