@@ -125,9 +125,8 @@ public class SamplerStartCommand extends FlareSubCommand {
     private void setExportProps(ExportProps exportProps, ICommandSender sender, String[] args) {
         exportProps.creator(sender)
                 .separateParentCalls(hasArg(args, "separate-parent-calls"))
-                .resolver(this.flare::methodDescriptorResolver)
-                .classSourceLookup(this.flare::classSourceLookup)
                 .saveToFile(hasArg(args, "save-to-file"));
+        ExportProps.setDefault(this.flare, exportProps);
         String comment = getArgValue(args, "comment");
         if (comment != null) {
             exportProps.comment(comment);

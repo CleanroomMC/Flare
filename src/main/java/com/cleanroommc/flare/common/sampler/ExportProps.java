@@ -1,5 +1,6 @@
 package com.cleanroommc.flare.common.sampler;
 
+import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.sampler.node.MethodDescriptorResolver;
 import com.cleanroommc.flare.api.sampler.source.ClassSourceLookup;
 import com.cleanroommc.flare.proto.FlareSamplerProtos;
@@ -9,6 +10,10 @@ import java.lang.ref.WeakReference;
 import java.util.function.Supplier;
 
 public class ExportProps {
+
+    public static void setDefault(FlareAPI flare, ExportProps exportProps) {
+        exportProps.resolver(flare::methodDescriptorResolver).classSourceLookup(flare::classSourceLookup);
+    }
 
     private WeakReference<ICommandSender> creator;
     private String comment;

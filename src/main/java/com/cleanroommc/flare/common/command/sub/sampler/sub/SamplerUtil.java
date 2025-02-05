@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class SamplerUtil {
 
-    static String upload(FlareAPI flare, ExportProps exportProps, Sampler sampler, boolean live, boolean stop) throws Throwable {
+    public static String upload(FlareAPI flare, ExportProps exportProps, Sampler sampler, boolean live, boolean stop) throws Throwable {
         String key;
         SamplerData samplerData = getSamplerProto(flare, exportProps, sampler, stop);
         if (live) {
@@ -31,7 +31,7 @@ public final class SamplerUtil {
         return url;
     }
 
-    static Path save(FlareAPI flare, ExportProps exportProps, Sampler sampler, boolean stop) throws IOException {
+    public static Path save(FlareAPI flare, ExportProps exportProps, Sampler sampler, boolean stop) throws IOException {
         Path profilerPath = flare.saveDirectory().resolve("profiler");
         String fileName = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh_mm_ss").format(LocalDateTime.now()) + ".sparkprofile";
         Path profilerFile = profilerPath.resolve(fileName);

@@ -53,7 +53,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
     private final TrustedKeyStore trustedKeyStore = new TrustedKeyStore();
     private final TickStatistics tickStatistics = new FlareTickStatistics();
     private final PingStatistics pingStatistics = new FlarePingStatistics();
-    private final SamplerContainer<?> sampler = new SamplerContainer<>();
+    private final SamplerContainer<?> sampler = new SamplerContainer<>(this);
     // TODO: Debate if this should be in API
     private final BytesocksClient bytesocksClient;
 
@@ -68,7 +68,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
 
     Flare(Path saveDirectory) {
         this.saveDirectory = saveDirectory;
-        this.activityLog = new FlareActivityLog(this.saveDirectory);
+        this.activityLog = new FlareActivityLog(this, this.saveDirectory);
         // this.bytesocksClient = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9) ? ... :
         this.bytesocksClient = J8BytesocksClient.create("spark-usersockets.lucko.me", "spark-plugin");
         this.objects.put(BytesocksClient.class, this.bytesocksClient);

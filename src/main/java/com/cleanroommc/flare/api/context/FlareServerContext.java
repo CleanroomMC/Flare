@@ -30,6 +30,9 @@ public interface FlareServerContext {
     }
 
     default List<World> worlds() {
+        if (server() == null) {
+            return Collections.emptyList();
+        }
         return Arrays.asList(server().worlds);
     }
 
@@ -49,6 +52,9 @@ public interface FlareServerContext {
     }
 
     default List<EntityPlayerMP> players() {
+        if (server() == null) {
+            return Collections.emptyList();
+        }
         return server().getPlayerList().getPlayers();
     }
 
