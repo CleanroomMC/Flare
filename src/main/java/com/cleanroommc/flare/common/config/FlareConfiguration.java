@@ -25,15 +25,15 @@ public class FlareConfiguration {
             "STARTING_WORLD: Profiles the FMLServerStartingEvent",
             "STARTED_WORLD: Profiles the FMLServerStartedEvent",
     })
-    public static SamplingStage[] stages = new SamplingStage[0];
+    public static String[] stages = new String[0];
 
     static {
         ConfigAnytime.register(FlareConfiguration.class);
     }
 
     public static boolean isStageOn(SamplingStage stage) {
-        for (SamplingStage s : stages) {
-            if (s == stage) {
+        for (String s : stages) {
+            if (stage.name().equals(s)) {
                 return true;
             }
         }
