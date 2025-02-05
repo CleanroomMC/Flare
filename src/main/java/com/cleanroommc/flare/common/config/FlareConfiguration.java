@@ -27,6 +27,12 @@ public class FlareConfiguration {
     })
     public static String[] stages = new String[0];
 
+    @Config.Comment("Interval for default sampling runs. Default: 4")
+    public static int defaultSamplerInterval = 4;
+
+    @Config.Comment("Force using Java sampler for default sampling runs. Default: false")
+    public static boolean forceDefaultJavaSampler = false;
+
     static {
         ConfigAnytime.register(FlareConfiguration.class);
     }
