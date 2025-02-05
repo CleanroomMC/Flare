@@ -153,7 +153,7 @@ public class AsyncProfilerAccess {
             throw new UnsupportedSystemException(os, arch);
         }
         // Extract the profiler binary from the spark jar file
-        String resource = "flare/" + libPath + "/libasyncProfiler.so";
+        String resource = "async-profiler/" + libPath + "/libasyncProfiler.so";
         URL profilerResource = AsyncProfilerAccess.class.getClassLoader().getResource(resource);
         if (profilerResource == null) {
             throw new IllegalStateException("Could not find " + resource + " in flare's jar file");
