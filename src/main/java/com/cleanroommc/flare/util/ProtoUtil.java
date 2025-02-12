@@ -41,7 +41,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import javax.annotation.Nullable;
@@ -55,11 +54,11 @@ public final class ProtoUtil {
 
     public static PlatformMetadata getPlatformMetadataProto() {
         return PlatformMetadata.newBuilder()
-                .setName(ForgeVersion.MOD_ID)
+                .setName(LoaderUtil.getName())
                 .setType(FMLLaunchHandler.side().isClient() ? PlatformMetadata.Type.CLIENT : PlatformMetadata.Type.SERVER)
-                .setMinecraftVersion(ForgeVersion.mcVersion)
+                .setMinecraftVersion("1.12.2")
                 .setSparkVersion(2)
-                .setVersion(ForgeVersion.getVersion())
+                .setVersion(LoaderUtil.getVersion())
                 .build();
     }
 
