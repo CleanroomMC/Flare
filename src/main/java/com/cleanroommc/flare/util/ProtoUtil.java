@@ -14,6 +14,7 @@ import com.cleanroommc.flare.api.util.DoubleAverageInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.common.component.disk.DiskUsage;
+import com.cleanroommc.flare.common.component.gpu.GpuInfo;
 import com.cleanroommc.flare.common.component.memory.MemoryInfo;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDumpSummary;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDumpSummary.Entry;
@@ -167,12 +168,19 @@ public final class ProtoUtil {
         return builder.build();
     }
 
+    // TODO: query if a GPU section is possible
     public static SystemStatistics.Cpu getCpuProto() {
+        String model = CpuInfo.queryCpuModel();
+        String gpu = GpuInfo.queryGpuModel();
+        if (gpu != null) {
+            model += ". And the GPU is described as : ";
+            model += gpu;
+        }
         return SystemStatistics.Cpu.newBuilder()
                 .setThreads(Runtime.getRuntime().availableProcessors())
                 .setProcessUsage(getProcessLoadProto())
                 .setSystemUsage(getSystemLoadProto())
-                .setModelName(CpuInfo.queryCpuModel())
+                .setModelName(model)
                 .build();
     }
 
