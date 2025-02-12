@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0] - 2025-02-12
+
+### Added
+- GPU Information in reports (client-side only)
+- Cleanroom detection
+
+### Fixed
+- Errors when creating sampler reports due to null defaults in ExportProps
+
+### Removed
+- Debug lines
+
 ## [0.3.0] - 2025-02-05
 
 ### Added
