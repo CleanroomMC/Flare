@@ -183,7 +183,6 @@ public abstract class AbstractSampler implements Sampler {
 
             ProtoTimeEncoder timeEncoder = new ProtoTimeEncoder(mode(), data);
             int[] timeWindows = timeEncoder.getKeys();
-            FlareAPI.getInstance().logger().warn("Time Windows: {}", Arrays.toString(timeWindows));
             for (int timeWindow : timeWindows) {
                 proto.addTimeWindows(timeWindow);
             }

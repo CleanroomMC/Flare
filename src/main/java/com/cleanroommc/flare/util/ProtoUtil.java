@@ -387,7 +387,7 @@ public final class ProtoUtil {
                                                  MethodDescriptorResolver resolver, boolean separateParentCalls) {
         FlareSamplerProtos.ThreadNode.Builder proto = FlareSamplerProtos.ThreadNode.newBuilder().setName(threadNode.label());
         double[] times = threadNode.encodeTimesForProto(timeEncoder);
-        FlareAPI.getInstance().logger().warn("[{}] Time Windows: {}", threadNode.label(), Arrays.toString(times));
+        // FlareAPI.getInstance().logger().warn("[{}] Time Windows: {}", threadNode.label(), Arrays.toString(times));
         for (double time : times) {
             proto.addTimes(time);
         }
@@ -471,7 +471,7 @@ public final class ProtoUtil {
                 .setClassName(stackTraceNode.className())
                 .setMethodName(stackTraceNode.methodName());
         double[] times = stackTraceNode.encodeTimesForProto(timeEncoder);
-        FlareAPI.getInstance().logger().warn("[{}.{}()] Time Windows: {}", stackTraceNode.className(), stackTraceNode.methodName(), Arrays.toString(times));
+        // FlareAPI.getInstance().logger().warn("[{}.{}()] Time Windows: {}", stackTraceNode.className(), stackTraceNode.methodName(), Arrays.toString(times));
         for (double time : times) {
             proto.addTimes(time);
         }

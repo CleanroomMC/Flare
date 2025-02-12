@@ -139,7 +139,7 @@ public class WindowStatisticsCollector {
         builder.setEndTime(endTime);
         builder.setDuration((int) (endTime - startTime));
 
-        this.flare.logger().warn("Window: {} | End Time: {} | Start Time: {} | Duration: {}", window, endTime, startTime, (int) (endTime - startTime));
+        // this.flare.logger().warn("Window: {} | End Time: {} | Start Time: {} | Duration: {}", window, endTime, startTime, (int) (endTime - startTime));
 
         TickStatistics tickStatistics = this.flare.tickStats();
         if (tickStatistics != null) {
