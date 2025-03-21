@@ -14,8 +14,10 @@ import com.cleanroommc.flare.api.sampler.source.ClassSourceLookup;
 import com.cleanroommc.flare.api.sampler.source.SourceMetadata;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper.GameThread;
+import com.cleanroommc.flare.api.tick.TickCallback;
 import com.cleanroommc.flare.api.tick.TickRoutine;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.common.activity.FlareActivityLog;
 import com.cleanroommc.flare.common.component.ping.FlarePingStatistics;
 import com.cleanroommc.flare.common.component.tick.FlareTickRoutine;
@@ -41,6 +43,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -51,14 +54,15 @@ public class Flare implements FlareAPI, FlareClientAPI {
     private final Map<Class<?>, Object> objects = new Object2ObjectOpenHashMap<>();
     private final BytebinClient bytebinClient = new FlareBytebinClient();
     private final TrustedKeyStore trustedKeyStore = new TrustedKeyStore();
-    private final TickStatistics tickStatistics = new FlareTickStatistics();
     private final PingStatistics pingStatistics = new FlarePingStatistics();
     private final SamplerContainer<?> sampler = new SamplerContainer<>(this);
     // TODO: Debate if this should be in API
     private final BytesocksClient bytesocksClient;
-
     private final Path saveDirectory;
     private final ActivityLog activityLog;
+    private final Map<TickType, FlareTickStatistics> clientTickStatistics = new EnumMap<>(TickType.class);
+    private final Map<TickType, FlareTickStatistics> serverTickStatistics = new EnumMap<>(TickType.class);
+    private final TickRoutine tickRoutine = new FlareTickRoutine();
 
     private ExecutorService asyncExecutor;
     private long serverStartTime = -1L;
@@ -72,6 +76,21 @@ public class Flare implements FlareAPI, FlareClientAPI {
         // this.bytesocksClient = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9) ? ... :
         this.bytesocksClient = J8BytesocksClient.create("spark-usersockets.lucko.me", "spark-plugin");
         this.objects.put(BytesocksClient.class, this.bytesocksClient);
+        this.clientTickStatistics.put(TickType.ALL, new FlareTickStatistics(Side.CLIENT, TickType.ALL));
+        this.clientTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
+        this.clientTickStatistics.put(TickType.RENDER, new FlareTickStatistics(Side.CLIENT, TickType.RENDER));
+        this.clientTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
+
+        this.serverTickStatistics.put(TickType.ALL, new FlareTickStatistics(Side.CLIENT, TickType.ALL));
+        this.serverTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
+        this.serverTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
+
+        for (FlareTickStatistics statistics : this.clientTickStatistics.values()) {
+            tickRoutine.addCallback(statistics);
+        }
+        for (FlareTickStatistics statistics : this.serverTickStatistics.values()) {
+            tickRoutine.addCallback(statistics);
+        }
     }
 
     void logServerStartTime() {
@@ -127,11 +146,6 @@ public class Flare implements FlareAPI, FlareClientAPI {
     }
 
     @Override
-    public TickStatistics tickStats() {
-        return tickStatistics;
-    }
-
-    @Override
     public PingStatistics pingStats() {
         return pingStatistics;
     }
@@ -175,6 +189,12 @@ public class Flare implements FlareAPI, FlareClientAPI {
                 ModContainer::getDisplayVersion,
                 mc -> mc.getMetadata().authorList
         );
+    }
+
+    @Override
+    public TickStatistics tickStatistics(Side side, TickType type) {
+        Map<TickType, FlareTickStatistics> statistics = side.isClient() ? this.clientTickStatistics : this.serverTickStatistics;
+        return statistics.get(type);
     }
 
     @Override

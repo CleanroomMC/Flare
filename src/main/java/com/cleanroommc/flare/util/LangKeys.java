@@ -60,6 +60,7 @@ public enum LangKeys {
     PING_STATISTICS_SINGLEPLAYER("flare.message.error.ping_statistics_singleplayer", "Ping statistics isn't applicable for Singleplayer!"),
     PING_STATISTICS_NOT_ENOUGH_DATA("flare.message.error.ping_statistics_not_enough_data", "There isn't enough data to show ping averages yet. Please try again later."),
     INSPECTING_HEAP_UNEXPECTED_EXCEPTION("flare.message.error.inspecting_heap_unexpected_exception", "An error occurred whilst inspecting the heap."),
+    TPS_SERVER_HAS_NO_RENDERING("flare.message.error.server_has_no_rendering", "Cannot track TPS of rendering on the server side."),
 
     // Sampler Exceptions
     SAMPLER_ALREADY_STARTED("flare.message.sampler_already_started", "Sampler is already active."),

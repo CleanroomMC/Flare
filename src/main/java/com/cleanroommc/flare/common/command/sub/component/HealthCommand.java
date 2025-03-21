@@ -2,6 +2,7 @@ package com.cleanroommc.flare.common.command.sub.component;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.common.component.disk.DiskUsage;
@@ -16,6 +17,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.lang.management.*;
@@ -57,7 +59,7 @@ public class HealthCommand extends FlareSubCommand {
     }
 
     private void sendTickStatistics(ICommandSender sender) {
-        TickStatistics stats = this.flare.tickStats();
+        TickStatistics stats = this.flare.tickStatistics(Side.SERVER, TickType.ALL);
         sendMessage(sender, LangKeys.TPS_STATISTICS_RECALL,
                 StatisticFormatter.formatTps(stats.tps5Sec()),
                 StatisticFormatter.formatTps(stats.tps10Sec()),

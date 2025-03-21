@@ -14,8 +14,10 @@ import com.cleanroommc.flare.api.sampler.source.SourceMetadata;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.tick.TickRoutine;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.common.websocket.TrustedKeyStore;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
@@ -84,8 +86,6 @@ public interface FlareAPI extends FlareServerContext {
 
     <T extends Sampler> SamplerContainer<T> samplerContainer();
 
-    TickStatistics tickStats();
-
     PingStatistics pingStats();
 
     TickRoutine tickRoutine();
@@ -98,5 +98,7 @@ public interface FlareAPI extends FlareServerContext {
     MetadataProvider metadataProvider();
 
     List<SourceMetadata> sourceMetadata();
+
+    TickStatistics tickStatistics(Side side, TickType type);
 
 }

@@ -3,12 +3,14 @@ package com.cleanroommc.flare.common.component.tick;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.tick.TickCallback;
 import com.cleanroommc.flare.api.tick.TickRoutine;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.common.component.memory.heap.gc.GarbageCollectionMonitor;
 import com.cleanroommc.flare.util.ChatUtil;
 import com.cleanroommc.flare.util.LangKeys;
 import com.sun.management.GarbageCollectionNotificationInfo;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.text.DecimalFormat;
 import java.util.DoubleSummaryStatistics;
@@ -16,12 +18,14 @@ import java.util.DoubleSummaryStatistics;
 /**
  * Monitoring process for the server/client tick rate.
  */
-public abstract class TickMonitor implements TickCallback, GarbageCollectionMonitor.Listener {
+public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Listener {
 
     private static final DecimalFormat DF = new DecimalFormat("#.##");
 
     /** Flare API */
     private final FlareAPI flare;
+    private final Side side;
+    private final TickType type;
     private final TickRoutine tickRoutine;
     /** The index of the tick when the monitor first started */
     private final int zeroTick;
@@ -53,8 +57,10 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
     /** The average tick time, defined at the end of the SETUP phase. */
     private double averageTickTime;
 
-    public TickMonitor(FlareAPI flare, TickRoutine tickRoutine, ReportPredicate reportPredicate, boolean monitorGc) {
+    public TickMonitor(FlareAPI flare, Side side, TickType type, TickRoutine tickRoutine, ReportPredicate reportPredicate, boolean monitorGc) {
         this.flare = flare;
+        this.side = side;
+        this.type = type;
         this.tickRoutine = tickRoutine;
         this.zeroTick = tickRoutine.currentTick();
         this.reportPredicate = reportPredicate;
@@ -72,11 +78,11 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
 
     public void start(ICommandSender commandSender) {
         this.commandSender = commandSender;
-        tickRoutine.addCallback(this);
+        this.tickRoutine.addCallback(this);
     }
 
     public void stop() {
-        tickRoutine.removeCallback(this);
+        this.tickRoutine.removeCallback(this);
         if (this.garbageCollectionMonitor != null) {
             this.garbageCollectionMonitor.close();
         }
@@ -84,14 +90,18 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
     }
 
     @Override
-    public void onTickStart(int currentTick, double duration) {
+    public void onTickStart(Side side, TickType type, int currentTick, double duration) {
+        if (side != this.side || type != this.type) {
+            return;
+        }
+
         double now = ((double) System.nanoTime()) / 1000000d;
 
         // Initialize
         if (this.phase == null) {
+            ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_START);
             this.phase = Phase.SETUP;
             this.lastTickTime = now;
-            ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_START);
             return;
         }
 
@@ -110,12 +120,13 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
 
             // Move onto the next state
             if (this.averageTickTimeCalc.getCount() >= 120) {
-                // TODO: was async
-                ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_END,
-                        DF.format(this.averageTickTimeCalc.getMax()),
-                        DF.format(this.averageTickTimeCalc.getMin()),
-                        DF.format(this.averageTickTimeCalc.getAverage()));
-                ChatUtil.sendMessage(this.flare, this.commandSender, this.reportPredicate.getMonitoringStartMessage());
+                this.flare.syncWithServer(() -> {
+                    ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_END,
+                            DF.format(this.averageTickTimeCalc.getMax()),
+                            DF.format(this.averageTickTimeCalc.getMin()),
+                            DF.format(this.averageTickTimeCalc.getAverage()));
+                    ChatUtil.sendMessage(this.flare, this.commandSender, this.reportPredicate.getMonitoringStartMessage());
+                });
                 this.averageTickTime = this.averageTickTimeCalc.getAverage();
                 this.phase = Phase.MONITORING;
             }
@@ -125,8 +136,8 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
             double increase = tickDuration - this.averageTickTime;
             double percentageChange = (increase * 100d) / this.averageTickTime;
             if (this.reportPredicate.shouldReport(tickDuration, increase, percentageChange)) {
-                // TODO: Was async
-                ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_REPORT, getCurrentTick(), DF.format(tickDuration), DF.format(percentageChange));
+                this.flare.syncWithServer(() -> ChatUtil.sendMessage(this.flare, this.commandSender,
+                        LangKeys.TICK_MONITORING_REPORT, getCurrentTick(), DF.format(tickDuration), DF.format(percentageChange)));
             }
         }
     }
@@ -138,10 +149,11 @@ public abstract class TickMonitor implements TickCallback, GarbageCollectionMoni
             this.lastTickTime = 0;
             return;
         }
-        ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_GC_REPORT,
+        this.flare.syncWithServer(() -> ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_GC_REPORT,
                 getCurrentTick(),
                 DF.format(data.getGcInfo().getDuration()),
-                GarbageCollectionMonitor.getGcType(data));
+                GarbageCollectionMonitor.getGcType(data)));
+;
     }
 
 }

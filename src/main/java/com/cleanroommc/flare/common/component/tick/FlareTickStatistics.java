@@ -2,7 +2,9 @@ package com.cleanroommc.flare.common.component.tick;
 
 import com.cleanroommc.flare.api.tick.TickCallback;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.util.RollingAverage;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,18 +35,26 @@ public class FlareTickStatistics implements TickCallback, TickStatistics {
     private final TpsRollingAverage tps1Min = new TpsRollingAverage(60);
     private final TpsRollingAverage tps5Min = new TpsRollingAverage(60 * 5);
     private final TpsRollingAverage tps15Min = new TpsRollingAverage(60 * 15);
-    private final TpsRollingAverage[] tpsAverages = {this.tps5Sec, this.tps10Sec, this.tps1Min, this.tps5Min, this.tps15Min};
+    private final TpsRollingAverage[] tpsAverages = { this.tps5Sec, this.tps10Sec, this.tps1Min, this.tps5Min, this.tps15Min };
     private final RollingAverage tickDuration10Sec = new RollingAverage(TPS * 10);
     private final RollingAverage tickDuration1Min = new RollingAverage(TPS * 60);
     private final RollingAverage tickDuration5Min = new RollingAverage(TPS * 60 * 5);
-    private final RollingAverage[] tickDurationAverages = {this.tickDuration10Sec, this.tickDuration1Min, this.tickDuration5Min};
+    private final RollingAverage[] tickDurationAverages = { this.tickDuration10Sec, this.tickDuration1Min, this.tickDuration5Min };
 
     private boolean durationSupported = false;
     private long last = 0;
 
+    private final Side side;
+    private final TickType type;
+
+    public FlareTickStatistics(Side side, TickType type) {
+        this.side = side;
+        this.type = type;
+    }
+
     @Override
-    public void onTickStart(int currentTick, double duration) {
-        if (currentTick % TPS_SAMPLE_INTERVAL != 0) {
+    public void onTickStart(Side side, TickType type, int currentTick, double duration) {
+        if (side != this.side || type != this.type || currentTick % TPS_SAMPLE_INTERVAL != 0) {
             return;
         }
 
@@ -68,7 +78,11 @@ public class FlareTickStatistics implements TickCallback, TickStatistics {
     }
 
     @Override
-    public void onTickEnd(int currentTick, double duration) {
+    public void onTickEnd(Side side, TickType type, int currentTick, double duration) {
+        if (side != this.side || type != this.type) {
+            return;
+        }
+
         this.durationSupported = true;
         BigDecimal decimal = new BigDecimal(duration);
         for (RollingAverage rollingAverage : this.tickDurationAverages) {

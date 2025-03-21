@@ -46,6 +46,7 @@ flare.message.error=Errored LangKey Entry. Report on GitHub!
 flare.message.error.ping_statistics_singleplayer=§cPing statistics isn't applicable for Singleplayer!
 flare.message.error.ping_statistics_not_enough_data=§cThere isn't enough data to show ping averages yet. Please try again later.
 flare.message.error.inspecting_heap_unexpected_exception=§cAn error occurred whilst inspecting the heap.
+flare.message.error.server_has_no_rendering=§cCannot track TPS of rendering on the server side.
 
 flare.message.sampler_already_started=Sampler is already active.
 flare.message.sampler_has_not_started=Sampler has not started yet.

@@ -20,7 +20,7 @@ public class FlareCommand extends CommandTreeBase {
         // Leaves
         addSubcommand(new HealthCommand(flare));
         addSubcommand(new PingCommand(flare));
-        addSubcommand(new TPSCommand(flare));
+        addSubcommand(new TPSCommand(side, flare));
     }
 
     @Override
