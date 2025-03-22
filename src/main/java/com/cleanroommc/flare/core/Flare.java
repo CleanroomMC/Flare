@@ -167,7 +167,8 @@ public class Flare implements FlareAPI, FlareClientAPI {
 
     @Override
     public MetadataProvider metadataProvider() {
-        return Collections::emptyMap;
+        // return Collections::emptyMap;
+        return () -> Collections.singletonMap("GPU", new JsonPrimitive(GpuInfo.queryGpuModel()));
     }
 
     @Override

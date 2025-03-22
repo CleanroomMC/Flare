@@ -170,17 +170,11 @@ public final class ProtoUtil {
 
     // TODO: query if a GPU section is possible
     public static SystemStatistics.Cpu getCpuProto() {
-        String model = CpuInfo.queryCpuModel();
-        String gpu = GpuInfo.queryGpuModel();
-        if (gpu != null) {
-            model += ". And the GPU is described as : ";
-            model += gpu;
-        }
         return SystemStatistics.Cpu.newBuilder()
                 .setThreads(Runtime.getRuntime().availableProcessors())
                 .setProcessUsage(getProcessLoadProto())
                 .setSystemUsage(getSystemLoadProto())
-                .setModelName(model)
+                .setModelName(CpuInfo.queryCpuModel())
                 .build();
     }
 
