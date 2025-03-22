@@ -88,7 +88,7 @@ public interface FlareAPI extends FlareServerContext {
 
     PingStatistics pingStats();
 
-    TickRoutine tickRoutine();
+    TickRoutine tickRoutine(Side side);
 
     MethodDescriptorResolver methodDescriptorResolver();
 

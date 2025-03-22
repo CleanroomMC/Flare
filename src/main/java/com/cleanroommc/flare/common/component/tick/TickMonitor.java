@@ -90,11 +90,12 @@ public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Liste
     }
 
     @Override
-    public void onTickStart(Side side, TickType type, int currentTick, double duration) {
-        if (side != this.side || type != this.type) {
-            return;
-        }
+    public Side getSide() {
+        return side;
+    }
 
+    @Override
+    public void onTickStart(int currentTick, double duration) {
         double now = ((double) System.nanoTime()) / 1000000d;
 
         // Initialize

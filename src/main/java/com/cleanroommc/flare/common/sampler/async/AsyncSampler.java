@@ -12,6 +12,7 @@ import com.cleanroommc.flare.common.sampler.ExportProps;
 import com.cleanroommc.flare.common.websocket.ViewerSocket;
 import com.cleanroommc.flare.proto.FlareSamplerProtos.SamplerData;
 import com.cleanroommc.flare.util.FlareThreadFactory;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -41,9 +42,9 @@ public class AsyncSampler extends AbstractSampler {
     /** The task to send statistics to the viewer socket */
     private ScheduledFuture<?> socketStatisticsTask;
 
-    public AsyncSampler(FlareAPI flare, ThreadGrouper threadGrouper, SampleCollector<?> collector, int interval,
+    public AsyncSampler(FlareAPI flare, Side side, ThreadGrouper threadGrouper, SampleCollector<?> collector, int interval,
                         ThreadDumper threadDumper, long endTime, boolean runningInBackground) {
-        super(flare, interval, threadDumper, endTime, runningInBackground);
+        super(flare, side, interval, threadDumper, endTime, runningInBackground);
         this.sampleCollector = collector;
         this.profilerAccess = AsyncProfilerAccess.getInstance(flare);
         this.dataAggregator = new AsyncDataAggregator(threadGrouper);
@@ -60,7 +61,7 @@ public class AsyncSampler extends AbstractSampler {
      */
     @Override
     public void startWork() {
-        TickRoutine tickHook = this.flare.tickRoutine();
+        TickRoutine tickHook = this.flare.tickRoutine(this.side);
         if (tickHook != null) {
             this.windowStatisticsCollector.startCountingTicks(tickHook);
         }

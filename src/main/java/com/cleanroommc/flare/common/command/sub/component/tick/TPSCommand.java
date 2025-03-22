@@ -44,6 +44,9 @@ public class TPSCommand extends FlareSubCommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
         String type = getArgValue(args, "type");
+        if (type == null) {
+            type = "all";
+        }
         TickType tickType;
         switch (type) {
             case "render":

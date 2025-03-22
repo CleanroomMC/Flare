@@ -14,11 +14,11 @@ import com.cleanroommc.flare.api.sampler.source.ClassSourceLookup;
 import com.cleanroommc.flare.api.sampler.source.SourceMetadata;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper.GameThread;
-import com.cleanroommc.flare.api.tick.TickCallback;
 import com.cleanroommc.flare.api.tick.TickRoutine;
 import com.cleanroommc.flare.api.tick.TickStatistics;
 import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.common.activity.FlareActivityLog;
+import com.cleanroommc.flare.common.component.gpu.GpuInfo;
 import com.cleanroommc.flare.common.component.ping.FlarePingStatistics;
 import com.cleanroommc.flare.common.component.tick.FlareTickRoutine;
 import com.cleanroommc.flare.common.component.tick.FlareTickStatistics;
@@ -31,6 +31,7 @@ import com.cleanroommc.flare.core.mixin.MinecraftAccessor;
 import com.cleanroommc.flare.core.mixin.MinecraftServerAccessor;
 import com.cleanroommc.flare.util.FlareMethodDescriptorResolver;
 import com.cleanroommc.flare.util.FlareThreadFactory;
+import com.google.gson.JsonPrimitive;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import me.lucko.bytesocks.client.BytesocksClient;
 import net.minecraft.client.Minecraft;
@@ -62,7 +63,8 @@ public class Flare implements FlareAPI, FlareClientAPI {
     private final ActivityLog activityLog;
     private final Map<TickType, FlareTickStatistics> clientTickStatistics = new EnumMap<>(TickType.class);
     private final Map<TickType, FlareTickStatistics> serverTickStatistics = new EnumMap<>(TickType.class);
-    private final TickRoutine tickRoutine = new FlareTickRoutine();
+    private final TickRoutine clientTickRoutine = new FlareTickRoutine.Client();
+    private final TickRoutine serverTickRoutine = new FlareTickRoutine.Server();
 
     private ExecutorService asyncExecutor;
     private long serverStartTime = -1L;
@@ -77,19 +79,19 @@ public class Flare implements FlareAPI, FlareClientAPI {
         this.bytesocksClient = J8BytesocksClient.create("spark-usersockets.lucko.me", "spark-plugin");
         this.objects.put(BytesocksClient.class, this.bytesocksClient);
         this.clientTickStatistics.put(TickType.ALL, new FlareTickStatistics(Side.CLIENT, TickType.ALL));
-        this.clientTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
-        this.clientTickStatistics.put(TickType.RENDER, new FlareTickStatistics(Side.CLIENT, TickType.RENDER));
-        this.clientTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
+//        this.clientTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
+//        this.clientTickStatistics.put(TickType.RENDER, new FlareTickStatistics(Side.CLIENT, TickType.RENDER));
+//        this.clientTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
 
         this.serverTickStatistics.put(TickType.ALL, new FlareTickStatistics(Side.CLIENT, TickType.ALL));
-        this.serverTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
-        this.serverTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
+//        this.serverTickStatistics.put(TickType.PLAYER, new FlareTickStatistics(Side.CLIENT, TickType.PLAYER));
+//        this.serverTickStatistics.put(TickType.WORLD, new FlareTickStatistics(Side.CLIENT, TickType.WORLD));
 
         for (FlareTickStatistics statistics : this.clientTickStatistics.values()) {
-            tickRoutine.addCallback(statistics);
+            this.clientTickRoutine.addCallback(statistics);
         }
         for (FlareTickStatistics statistics : this.serverTickStatistics.values()) {
-            tickRoutine.addCallback(statistics);
+            this.serverTickRoutine.addCallback(statistics);
         }
     }
 
@@ -151,8 +153,8 @@ public class Flare implements FlareAPI, FlareClientAPI {
     }
 
     @Override
-    public TickRoutine tickRoutine() {
-        return new FlareTickRoutine();
+    public TickRoutine tickRoutine(Side side) {
+        return side.isClient() ? this.clientTickRoutine : this.serverTickRoutine;
     }
 
     @Override

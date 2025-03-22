@@ -3,10 +3,13 @@ package com.cleanroommc.flare.api.sampler;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadGrouper;
 import com.cleanroommc.flare.api.tick.TickRoutine;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.concurrent.TimeUnit;
 
 public interface SamplerBuilder {
+
+    SamplerBuilder side(Side side);
 
     SamplerBuilder mode(SamplerMode mode);
 

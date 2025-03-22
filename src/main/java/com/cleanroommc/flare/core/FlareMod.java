@@ -58,7 +58,10 @@ public class FlareMod extends DummyModContainer {
         if (event.getSide() == Side.CLIENT) {
             FlareKeybindings.register();
             FlareClientEvents.register();
+
+            FlareAPI.getInstance().tickRoutine(Side.CLIENT).start();
         }
+        FlareAPI.getInstance().tickRoutine(Side.SERVER).start();
     }
 
     @Subscribe

@@ -12,6 +12,7 @@ import com.cleanroommc.flare.common.sampler.window.WindowStatisticsCollector.Exp
 import com.cleanroommc.flare.common.websocket.ViewerSocket;
 import com.cleanroommc.flare.proto.FlareSamplerProtos.SamplerData;
 import com.cleanroommc.flare.util.FlareThreadFactory;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -36,15 +37,15 @@ public class JavaSampler extends AbstractSampler implements Runnable {
     /** The task to send statistics to the viewer socket */
     private ScheduledFuture<?> socketStatisticsTask;
 
-    public JavaSampler(FlareAPI flare, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground,
+    public JavaSampler(FlareAPI flare, Side side, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground,
                        ThreadGrouper grouper, boolean ignoreSleeping, boolean ignoreNative) {
-        super(flare, interval, threadDumper, endTime, runningInBackground);
+        super(flare, side, interval, threadDumper, endTime, runningInBackground);
         this.dataAggregator = JavaDataAggregator.simple(this, grouper, interval, ignoreSleeping, ignoreNative);
     }
 
-    public JavaSampler(FlareAPI flare, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground,
+    public JavaSampler(FlareAPI flare, Side side, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground,
                        boolean ignoreSleeping, boolean ignoreNative, ThreadGrouper threadGrouper, TickRoutine tickRoutine, int tickLengthThreshold) {
-        super(flare, interval, threadDumper, endTime, runningInBackground);
+        super(flare, side, interval, threadDumper, endTime, runningInBackground);
         this.dataAggregator = JavaDataAggregator.ticked(this, threadGrouper, interval, ignoreSleeping, ignoreNative,
                 tickRoutine, tickLengthThreshold);
     }
@@ -56,7 +57,7 @@ public class JavaSampler extends AbstractSampler implements Runnable {
 
     @Override
     protected void startWork() {
-        TickRoutine tickRoutine = this.flare.tickRoutine();
+        TickRoutine tickRoutine = this.flare.tickRoutine(this.side);
         if (tickRoutine != null) {
             if (this.dataAggregator.ticked()) {
                 ExplicitTickCounter counter = this.windowStatisticsCollector.startCountingTicksExplicit(tickRoutine);

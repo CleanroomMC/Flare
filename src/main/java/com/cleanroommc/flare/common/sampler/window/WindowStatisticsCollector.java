@@ -4,9 +4,11 @@ import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.sampler.window.ProfilingWindowUtils;
 import com.cleanroommc.flare.api.tick.TickRoutine;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.api.util.DoubleAverageInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.proto.FlareProtos;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class WindowStatisticsCollector {
 
     /** The platform */
     private final FlareAPI flare;
+    private final Side side;
     /** Map of profiling window -> start time */
     private final Map<Integer, Long> windowStartTimes = new HashMap<>();
     /** Map of profiling window -> statistics */
@@ -32,8 +35,9 @@ public class WindowStatisticsCollector {
 
     private TickCounter tickCounter;
 
-    public WindowStatisticsCollector(FlareAPI flare) {
+    public WindowStatisticsCollector(FlareAPI flare, Side side) {
         this.flare = flare;
+        this.side = side;
         this.stats = new ConcurrentHashMap<>();
     }
 
@@ -141,7 +145,7 @@ public class WindowStatisticsCollector {
 
         // this.flare.logger().warn("Window: {} | End Time: {} | Start Time: {} | Duration: {}", window, endTime, startTime, (int) (endTime - startTime));
 
-        TickStatistics tickStatistics = this.flare.tickStats();
+        TickStatistics tickStatistics = this.flare.tickStatistics(side, TickType.ALL);
         if (tickStatistics != null) {
             builder.setTps(tickStatistics.tps1Min());
 

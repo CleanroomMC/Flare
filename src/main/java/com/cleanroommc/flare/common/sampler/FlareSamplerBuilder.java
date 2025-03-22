@@ -12,6 +12,7 @@ import com.cleanroommc.flare.common.sampler.async.AsyncSampler;
 import com.cleanroommc.flare.common.sampler.async.SampleCollector;
 import com.cleanroommc.flare.common.sampler.java.JavaSampler;
 import com.google.common.base.Preconditions;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,9 +29,17 @@ public class FlareSamplerBuilder implements SamplerBuilder {
     private ThreadGrouper threadGrouper = ThreadGrouper.AS_ONE;
     private int ticksOver = -1;
     private TickRoutine tickRoutine = null;
+    private Side side = Side.SERVER;
 
     public FlareSamplerBuilder(FlareAPI flare) {
         this.flare = flare;
+    }
+
+    @Override
+    public SamplerBuilder side(Side side) {
+        Preconditions.checkNotNull(side, "Side must be provided");
+        this.side = side;
+        return this;
     }
 
     @Override
@@ -124,16 +133,16 @@ public class FlareSamplerBuilder implements SamplerBuilder {
 
         Sampler sampler;
         if (this.mode == SamplerMode.ALLOCATION) {
-            sampler = new AsyncSampler(this.flare, this.threadGrouper, new SampleCollector.Allocation(interval, this.allocLiveOnly),
+            sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Allocation(interval, this.allocLiveOnly),
                     interval, this.threadDumper, this.endTime, this.runningInBackground);
         } else if (canUseAsyncProfiler) {
-            sampler = new AsyncSampler(this.flare, this.threadGrouper, new SampleCollector.Execution(interval), interval,
+            sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Execution(interval), interval,
                     this.threadDumper, this.endTime, this.runningInBackground);
         } else if (onlyTicksOverMode) {
-            sampler = new JavaSampler(this.flare, interval, this.threadDumper, this.endTime, this.runningInBackground,
+            sampler = new JavaSampler(this.flare, this.side, interval, this.threadDumper, this.endTime, this.runningInBackground,
                     this.ignoreSleeping, this.ignoreNative, this.threadGrouper, this.tickRoutine, this.ticksOver);
         } else {
-            sampler = new JavaSampler(this.flare, interval, this.threadDumper, this.endTime, this.runningInBackground,
+            sampler = new JavaSampler(this.flare, this.side, interval, this.threadDumper, this.endTime, this.runningInBackground,
                     this.threadGrouper, this.ignoreSleeping, this.ignoreNative);
         }
         return sampler;

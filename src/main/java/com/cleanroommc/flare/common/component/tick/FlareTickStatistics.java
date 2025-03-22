@@ -53,8 +53,13 @@ public class FlareTickStatistics implements TickCallback, TickStatistics {
     }
 
     @Override
-    public void onTickStart(Side side, TickType type, int currentTick, double duration) {
-        if (side != this.side || type != this.type || currentTick % TPS_SAMPLE_INTERVAL != 0) {
+    public Side getSide() {
+        return side;
+    }
+
+    @Override
+    public void onTickStart(int currentTick, double duration) {
+        if (currentTick % TPS_SAMPLE_INTERVAL != 0) {
             return;
         }
 
@@ -78,11 +83,7 @@ public class FlareTickStatistics implements TickCallback, TickStatistics {
     }
 
     @Override
-    public void onTickEnd(Side side, TickType type, int currentTick, double duration) {
-        if (side != this.side || type != this.type) {
-            return;
-        }
-
+    public void onTickEnd(int currentTick, double duration) {
         this.durationSupported = true;
         BigDecimal decimal = new BigDecimal(duration);
         for (RollingAverage rollingAverage : this.tickDurationAverages) {

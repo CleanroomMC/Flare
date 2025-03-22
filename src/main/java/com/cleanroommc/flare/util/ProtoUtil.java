@@ -10,6 +10,7 @@ import com.cleanroommc.flare.api.sampler.node.type.ThreadNode;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadGrouper;
 import com.cleanroommc.flare.api.tick.TickStatistics;
+import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.api.util.DoubleAverageInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
@@ -43,6 +44,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.lang.management.ManagementFactory;
@@ -76,7 +78,7 @@ public final class ProtoUtil {
         return builder.build();
     }
 
-    public static PlatformStatistics getPlatformStatsProto(FlareAPI flare, boolean includeWorld,
+    public static PlatformStatistics getPlatformStatsProto(FlareAPI flare, Side side, boolean includeWorld,
                                                            @Nullable Map<String, GarbageCollectorStatistics> startingGcCollectorStats) {
         PlatformStatistics.Builder builder = PlatformStatistics.newBuilder();
         builder.setMemory(getHeapProto());
@@ -87,7 +89,7 @@ public final class ProtoUtil {
                     .forEach((beanName, gcCollectorStats) ->
                             builder.putGc(beanName, getPlatformGcProto(gcCollectorStats, uptime)));
         }
-        TickStatistics tickStats = flare.tickStats();
+        TickStatistics tickStats = flare.tickStatistics(side, TickType.ALL);
         if (tickStats != null) {
             builder.setTps(getTpsProto(tickStats));
             if (tickStats.isDurationSupported()) {
@@ -325,7 +327,7 @@ public final class ProtoUtil {
         return HeapMetadata.newBuilder()
                 .setPlatformMetadata(ProtoUtil.getPlatformMetadataProto())
                 .setCreator(ProtoUtil.getCommandSenderProto(creator))
-                .setPlatformStatistics(getPlatformStatsProto(flare, true, null))
+                .setPlatformStatistics(getPlatformStatsProto(flare, Side.SERVER, true, null))
                 .setSystemStatistics(getSystemStatsProto())
                 .build();
     }

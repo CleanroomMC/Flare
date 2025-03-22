@@ -18,6 +18,7 @@ import com.cleanroommc.flare.proto.FlareProtos.SystemStatistics;
 import com.cleanroommc.flare.proto.FlareSamplerProtos.SamplerData;
 import com.cleanroommc.flare.proto.FlareSamplerProtos.SamplerMetadata;
 import com.cleanroommc.flare.util.ProtoUtil;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +31,7 @@ public abstract class AbstractSampler implements Sampler {
 
     /** The FlareAPI */
     protected final FlareAPI flare;
+    protected final Side side;
     /** The interval to wait between sampling, in microseconds */
     protected final int interval;
     /** The instance used to generate thread information for use in sampling */
@@ -50,13 +52,14 @@ public abstract class AbstractSampler implements Sampler {
     /** A future to encapsulate the completion of this sampler instance */
     protected CompletableFuture<Sampler> future = new CompletableFuture<>();
 
-    protected AbstractSampler(FlareAPI flare, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground) {
+    protected AbstractSampler(FlareAPI flare, Side side, int interval, ThreadDumper threadDumper, long endTime, boolean runningInBackground) {
         this.flare = flare;
+        this.side = side;
         this.interval = interval;
         this.threadDumper = threadDumper;
         this.autoEndTime = endTime;
         this.background = runningInBackground;
-        this.windowStatisticsCollector = new WindowStatisticsCollector(flare);
+        this.windowStatisticsCollector = new WindowStatisticsCollector(flare, side);
     }
 
     protected abstract void startWork();
@@ -123,7 +126,7 @@ public abstract class AbstractSampler implements Sampler {
             if (this.viewerSockets.isEmpty()) {
                 return;
             }
-            PlatformStatistics platformStats = ProtoUtil.getPlatformStatsProto(this.flare, false, getInitialGcStats());
+            PlatformStatistics platformStats = ProtoUtil.getPlatformStatsProto(this.flare, this.side, false, getInitialGcStats());
             SystemStatistics systemStats = ProtoUtil.getSystemStatsProto();
             for (ViewerSocket viewerSocket : this.viewerSockets) {
                 viewerSocket.sendUpdatedStatistics(platformStats, systemStats);
@@ -159,7 +162,7 @@ public abstract class AbstractSampler implements Sampler {
             builder.setNumberOfTicks(totalTicks);
         }
 
-        builder.setPlatformStatistics(ProtoUtil.getPlatformStatsProto(this.flare, true, getInitialGcStats()));
+        builder.setPlatformStatistics(ProtoUtil.getPlatformStatsProto(this.flare, this.side, true, getInitialGcStats()));
         builder.setSystemStatistics(ProtoUtil.getSystemStatsProto());
 
         MetadataProvider extraMetadataProvider = flare.metadataProvider();
