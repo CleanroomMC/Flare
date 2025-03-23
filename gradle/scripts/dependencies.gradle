@@ -27,5 +27,8 @@ dependencies {
     embed 'me.lucko:bytesocks-java-client-api:1.0-SNAPSHOT'
     embed 'com.github.jvm-profiling-tools:async-profiler:v2.8.3'
 
+    // TODO
+    // embed 'tools.profiler:async-profiler:3.0'
+
     implementation 'com.cleanroommc:configanytime:2.0'
 }

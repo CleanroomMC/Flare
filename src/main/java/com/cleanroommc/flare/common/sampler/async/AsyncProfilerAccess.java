@@ -142,18 +142,17 @@ public class AsyncProfilerAccess {
             arch = "amd64-musl";
         }
         Table<String, String, String> supported = ImmutableTable.<String, String, String>builder()
-                .put("linux", "amd64", "linux/amd64")
-                .put("linux", "amd64-musl", "linux/amd64-musl")
-                .put("linux", "aarch64", "linux/aarch64")
-                .put("macosx", "amd64", "macos")
-                .put("macosx", "aarch64", "macos")
+                .put("linux", "amd64", "linux/amd64/libasyncProfiler.so")
+                .put("linux", "aarch64", "linux/aarch64/libasyncProfiler.so")
+                .put("macosx", "amd64", "macos/libasyncProfiler.dylib")
+                .put("macosx", "aarch64", "macos/libasyncProfiler.dylib")
                 .build();
         String libPath = supported.get(os, arch);
         if (libPath == null) {
             throw new UnsupportedSystemException(os, arch);
         }
         // Extract the profiler binary from the spark jar file
-        String resource = "async-profiler/" + libPath + "/libasyncProfiler.so";
+        String resource = "async-profiler/" + libPath;
         URL profilerResource = AsyncProfilerAccess.class.getClassLoader().getResource(resource);
         if (profilerResource == null) {
             throw new IllegalStateException("Could not find " + resource + " in flare's jar file");
