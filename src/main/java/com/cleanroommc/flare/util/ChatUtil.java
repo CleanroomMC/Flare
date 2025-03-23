@@ -63,21 +63,13 @@ public final class ChatUtil {
     }
 
     public static void sendMessage(FlareAPI flare, ICommandSender sender, LangKeys langKey, Object... formatArgs) {
-        if (sender instanceof RConConsoleSource || sender instanceof MinecraftServer || sender == null) {
-            flare.logger().warn(String.format(langKey.defaultText, formatArgs));
-        } else {
-            sender.sendMessage(new TextComponentTranslation(langKey.langKey, formatArgs));
-        }
+        sendMessage(flare, sender, new TextComponentTranslation(langKey.langKey, formatArgs));
     }
 
     public static void sendMessage(FlareAPI flare, ICommandSender sender, LangKeys langKey, Consumer<TextComponentTranslation> unaryOperator, Object... formatArgs) {
-        if (sender instanceof RConConsoleSource || sender instanceof MinecraftServer || sender == null) {
-            flare.logger().warn(String.format(langKey.defaultText, formatArgs));
-        } else {
-            TextComponentTranslation text = new TextComponentTranslation(langKey.langKey, formatArgs);
-            unaryOperator.accept(text);
-            sender.sendMessage(text);
-        }
+        TextComponentTranslation text = new TextComponentTranslation(langKey.langKey, formatArgs);
+        unaryOperator.accept(text);
+        sendMessage(flare, sender, text);
     }
     
     private ChatUtil() { }
