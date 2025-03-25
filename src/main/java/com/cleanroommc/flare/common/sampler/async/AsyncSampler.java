@@ -176,7 +176,7 @@ public class AsyncSampler extends AbstractSampler {
     public void attachSocket(ViewerSocket socket) {
         super.attachSocket(socket);
         if (this.socketStatisticsTask == null) {
-            this.socketStatisticsTask = this.scheduler.scheduleAtFixedRate(this::sendStatisticsToSocket, 10, 10, TimeUnit.SECONDS);
+            this.socketStatisticsTask = this.scheduler.scheduleAtFixedRate(this::sendStatisticsToSocket, 0, 10, TimeUnit.SECONDS);
         }
     }
 

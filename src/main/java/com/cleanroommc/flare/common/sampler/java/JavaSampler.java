@@ -32,6 +32,8 @@ public class JavaSampler extends AbstractSampler implements Runnable {
 
     /** The worker pool for inserting stack nodes */
     ScheduledExecutorService workerPool = service();
+    /** The worker for dealing with socket connections */
+    ScheduledExecutorService socketService = socketService();
     /** The main sampling task */
     private ScheduledFuture<?> samplingTask;
     /** The task to send statistics to the viewer socket */
@@ -87,7 +89,7 @@ public class JavaSampler extends AbstractSampler implements Runnable {
     public void attachSocket(ViewerSocket socket) {
         super.attachSocket(socket);
         if (this.socketStatisticsTask == null) {
-            this.socketStatisticsTask = this.workerPool.scheduleAtFixedRate(this::sendStatisticsToSocket, 10, 10, TimeUnit.SECONDS);
+            this.socketStatisticsTask = this.socketService.scheduleAtFixedRate(this::sendStatisticsToSocket, 0, 10, TimeUnit.SECONDS);
         }
     }
 
@@ -151,6 +153,10 @@ public class JavaSampler extends AbstractSampler implements Runnable {
     // TODO configure thread count
     private ScheduledExecutorService service() {
         return Executors.newScheduledThreadPool(6, new FlareThreadFactory(FlareAPI.getInstance(), "flare-java-sampler"));
+    }
+
+    private ScheduledExecutorService socketService() {
+        return Executors.newSingleThreadScheduledExecutor(new FlareThreadFactory(FlareAPI.getInstance(), "flare-viewer"));
     }
 
     private ScheduledFuture<?> samplingTask() {

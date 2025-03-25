@@ -47,6 +47,7 @@ public class SamplerViewCommand extends FlareSubCommand {
         this.flare.runAsync(() -> {
             try {
                 ExportProps exportProps = samplerContainer.getExportProps();
+                ExportProps.setDefault(this.flare, exportProps);
                 ViewerSocket viewerSocket = new ViewerSocket(this.flare, bytesocksClient, exportProps);
                 // TODO AbstractSampler
                 AbstractSampler abstractSampler = (AbstractSampler) sampler;

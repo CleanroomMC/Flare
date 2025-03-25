@@ -114,7 +114,6 @@ public class ViewerSocket implements ViewerSocketConnection.Listener, AutoClosea
 
         try {
             FlareSamplerProtos.SamplerData samplerData = sampler.toProto(this.flare, this.exportProps, false);
-            log("Sending updated sampler data.");
             String key = this.flare.bytebinClient().postContent(BytebinClient.FLARE_SAMPLER_MEDIA_TYPE, "live", samplerData);
             sendUpdatedSamplerData(key);
         } catch (Throwable t) {
@@ -137,6 +136,7 @@ public class ViewerSocket implements ViewerSocketConnection.Listener, AutoClosea
 
     @Override
     public void close() {
+        log("Closing connection.");
         this.socket.sendPacket(builder -> builder.setServerPong(ServerPong.newBuilder()
                 .setOk(false)
                 .build()
@@ -169,6 +169,8 @@ public class ViewerSocket implements ViewerSocketConnection.Listener, AutoClosea
      * @param payloadId the payload id of the updated data
      */
     public void sendUpdatedSamplerData(String payloadId) {
+        log("Sending updated sampler data.");
+
         this.socket.sendPacket(builder -> builder.setServerUpdateSampler(ServerUpdateSamplerData.newBuilder()
                 .setPayloadId(payloadId)
                 .build()

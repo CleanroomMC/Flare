@@ -130,6 +130,7 @@ public abstract class AbstractSampler implements Sampler {
             SystemStatistics systemStats = ProtoUtil.getSystemStatsProto();
             for (ViewerSocket viewerSocket : this.viewerSockets) {
                 viewerSocket.sendUpdatedStatistics(platformStats, systemStats);
+                viewerSocket.processWindowRotate(this);
             }
         } catch (Exception e) {
             e.printStackTrace();
