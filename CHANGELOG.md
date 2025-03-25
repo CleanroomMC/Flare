@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.0] - 2025-03-25
+
+### Added
+- Tick tracking, now works in samplers
+- Tick monitoring
+- Updated async-profiler to latest nightly (3.0-6761587)
+- Allow entity icons to show up in reports
+
+### Changed
+- Moved GPU metadata to "extras" section
+- Updated keybinds to reflect recent command changes
+- Simplified chat message checking to prepend prefixes
+
+### Fixed
+- Console logging raw or malformed strings
+- Various formatting issues with different translatable strings
+- Dedicated server crashes
+- Live viewer not working (note: experimental, works better than spark but not ideal)
+
 ## [0.4.0] - 2025-02-12
 
 ### Added
