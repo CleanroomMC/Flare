@@ -1,11 +1,9 @@
 package com.cleanroommc.flare.util;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Set;
 
 public enum LangKeys {
 
@@ -16,6 +14,7 @@ public enum LangKeys {
     TICK_MONITORING_END("flare.message.tick_monitoring_end", "Analysis is now complete.\n> Max: %sms\n> Min: %sms\n> Average: %sms"),
     TICK_MONITORING_REPORT("flare.message.tick_monitoring_report", "Tick #%d lasted %s ms. (%s%% increased from average)"),
     TICK_MONITORING_GC_REPORT("flare.message.tick_monitoring_gc_report", "Tick #%d included GC lasting %s ms. (Type = %s)"),
+    TICK_MONITORING_DISABLED("flare.message.tick_monitoring_disabled", "Tick monitor disabled."),
     TPS_STATISTICS_RECALL("flare.message.tps_statistics_recall", "TPS from the last 5s, 10s, 1m, 5m, 15m:\n%s, %s, %s, %s, %s\n"),
     TPS_STATISTICS_DURATION_AVERAGES("flare.message.tps_statistics_duration_averages", "Tick durations (min/med/95%%ile/max ms) from the last 10s, 1m:\n%s ; %s\n"),
     CPU_USAGE_SYSTEM_LOAD("flare.message.cpu_usage_system_load", "CPU usage from the last 10s, 1m, 15m:\n%s, %s, %s  (system)\n"),
@@ -89,18 +88,6 @@ public enum LangKeys {
 
     ;
 
-    private static final Set<String> KEYS = new ObjectOpenHashSet<>();
-
-    static {
-        for (LangKeys langkey : LangKeys.values()) {
-            KEYS.add(langkey.langKey);
-        }
-    }
-
-    public static boolean isFlareLangKey(String langKey) {
-        return KEYS.contains(langKey);
-    }
-
     final String langKey, defaultText;
 
     LangKeys(String langKey, String defaultText) {
@@ -111,6 +98,10 @@ public enum LangKeys {
     @SideOnly(Side.CLIENT)
     public String translate(Object... objects) {
         return I18n.format(this.langKey, objects);
+    }
+
+    public TextComponentTranslation component(Object... objects) {
+        return new TextComponentTranslation(this.langKey, objects);
     }
 
 }

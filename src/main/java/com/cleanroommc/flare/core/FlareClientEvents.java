@@ -2,7 +2,6 @@ package com.cleanroommc.flare.core;
 
 import com.cleanroommc.flare.client.tracker.GuiSelection;
 import com.cleanroommc.flare.util.ChatUtil;
-import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
@@ -27,7 +26,7 @@ public final class FlareClientEvents {
         if (event.getType() == ChatType.SYSTEM) {
             ITextComponent message = event.getMessage();
             if (message instanceof TextComponentTranslation) {
-                if (LangKeys.isFlareLangKey(((TextComponentTranslation) message).getKey())) {
+                if (((TextComponentTranslation) message).getKey().startsWith("flare.")) {
                     event.setMessage(ChatUtil.prefix(message));
                 }
             }

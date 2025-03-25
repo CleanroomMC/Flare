@@ -37,10 +37,6 @@ public final class ChatUtil {
         return PREFIX.createCopy().appendSibling(RESET.createCopy()).appendSibling(message.createCopy());
     }
 
-    public static boolean doesLangKeysExist(String langKey) {
-        return langKeys.containsKey(langKey);
-    }
-
     public static void sendMessage(FlareAPI flare, ICommandSender sender, ITextComponent textComponent) {
         if (sender == null) {
             flare.logger().warn(textComponent.getUnformattedText());
