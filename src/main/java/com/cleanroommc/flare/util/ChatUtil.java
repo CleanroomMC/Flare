@@ -3,8 +3,6 @@ package com.cleanroommc.flare.util;
 import com.cleanroommc.flare.api.FlareAPI;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.network.rcon.RConConsoleSource;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -44,21 +42,10 @@ public final class ChatUtil {
     }
 
     public static void sendMessage(FlareAPI flare, ICommandSender sender, ITextComponent textComponent) {
-        if (textComponent instanceof TextComponentTranslation) {
-            TextComponentTranslation langKey = (TextComponentTranslation) textComponent;
-            String rawLangKeys = langKey.getKey();
-            LangKeys defaultResponse = langKeys.get(rawLangKeys);
-            if (defaultResponse != null) {
-                sendMessage(flare, sender, defaultResponse, langKey.getFormatArgs());
-            } else {
-                sendMessage(flare, sender, LangKeys.ERROR, langKey.getFormatArgs());
-            }
+        if (sender == null) {
+            flare.logger().warn(textComponent.getUnformattedText());
         } else {
-            if (sender instanceof RConConsoleSource || sender instanceof MinecraftServer || sender == null) {
-                flare.logger().warn(textComponent.getUnformattedText());
-            } else {
-                sender.sendMessage(textComponent);
-            }
+            sender.sendMessage(textComponent);
         }
     }
 
