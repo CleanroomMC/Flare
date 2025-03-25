@@ -12,15 +12,12 @@ import com.sun.management.GarbageCollectionNotificationInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.text.DecimalFormat;
 import java.util.DoubleSummaryStatistics;
 
 /**
  * Monitoring process for the server/client tick rate.
  */
 public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Listener {
-
-    private static final DecimalFormat DF = new DecimalFormat("#.##");
 
     /** Flare API */
     private final FlareAPI flare;
@@ -65,7 +62,7 @@ public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Liste
         this.zeroTick = tickRoutine.currentTick();
         this.reportPredicate = reportPredicate;
         if (monitorGc) {
-            this.garbageCollectionMonitor =  new GarbageCollectionMonitor();
+            this.garbageCollectionMonitor = new GarbageCollectionMonitor();
             this.garbageCollectionMonitor.addListener(this);
         } else {
             this.garbageCollectionMonitor = null;
@@ -123,9 +120,9 @@ public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Liste
             if (this.averageTickTimeCalc.getCount() >= 120) {
                 this.flare.syncWithServer(() -> {
                     ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_END,
-                            DF.format(this.averageTickTimeCalc.getMax()),
-                            DF.format(this.averageTickTimeCalc.getMin()),
-                            DF.format(this.averageTickTimeCalc.getAverage()));
+                            ChatUtil.FLOAT_FORMAT.format(this.averageTickTimeCalc.getMax()),
+                            ChatUtil.FLOAT_FORMAT.format(this.averageTickTimeCalc.getMin()),
+                            ChatUtil.FLOAT_FORMAT.format(this.averageTickTimeCalc.getAverage()));
                     ChatUtil.sendMessage(this.flare, this.commandSender, this.reportPredicate.getMonitoringStartMessage());
                 });
                 this.averageTickTime = this.averageTickTimeCalc.getAverage();
@@ -138,7 +135,7 @@ public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Liste
             double percentageChange = (increase * 100d) / this.averageTickTime;
             if (this.reportPredicate.shouldReport(tickDuration, increase, percentageChange)) {
                 this.flare.syncWithServer(() -> ChatUtil.sendMessage(this.flare, this.commandSender,
-                        LangKeys.TICK_MONITORING_REPORT, getCurrentTick(), DF.format(tickDuration), DF.format(percentageChange)));
+                        LangKeys.TICK_MONITORING_REPORT, getCurrentTick(), ChatUtil.FLOAT_FORMAT.format(tickDuration), ChatUtil.FLOAT_FORMAT.format(percentageChange)));
             }
         }
     }
@@ -152,7 +149,7 @@ public class TickMonitor implements TickCallback, GarbageCollectionMonitor.Liste
         }
         this.flare.syncWithServer(() -> ChatUtil.sendMessage(this.flare, this.commandSender, LangKeys.TICK_MONITORING_GC_REPORT,
                 getCurrentTick(),
-                DF.format(data.getGcInfo().getDuration()),
+                ChatUtil.FLOAT_FORMAT.format(data.getGcInfo().getDuration()),
                 GarbageCollectionMonitor.getGcType(data)));
 ;
     }

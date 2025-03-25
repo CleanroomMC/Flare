@@ -1,5 +1,7 @@
 package com.cleanroommc.flare.common.component.tick;
 
+import com.cleanroommc.flare.util.ChatUtil;
+import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -43,7 +45,7 @@ public interface ReportPredicate {
 
         @Override
         public ITextComponent getMonitoringStartMessage() {
-            return new TextComponentTranslation("flare.message.monitoring_start.percentage_change", this.threshold);
+            return LangKeys.MONITORING_START_PERCENTAGE_CHANGE.component(ChatUtil.FLOAT_FORMAT.format(this.threshold));
         }
     }
 
@@ -65,7 +67,7 @@ public interface ReportPredicate {
 
         @Override
         public ITextComponent getMonitoringStartMessage() {
-            return new TextComponentTranslation("flare.message.monitoring_start.greater_duration", this.threshold);
+            return LangKeys.MONITORING_START_GREATER_DURATION.component(ChatUtil.FLOAT_FORMAT.format(this.threshold));
         }
     }
 

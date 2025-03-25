@@ -1,10 +1,10 @@
 #PARSE_ESCAPES
-flare.message.monitoring_start.percentage_change=Starting now, any ticks with >%f %% increase in duration compared to the average will be reported.
-flare.message.monitoring_start.greater_duration=Starting now, any ticks with duration >%f will be reported.
+flare.message.monitoring_start.percentage_change=Starting now, any ticks with at least a %s%% increase in duration compared to the average will be reported.
+flare.message.monitoring_start.greater_duration=Starting now, any ticks with duration of %sms or longer will be reported.
 flare.message.tick_monitoring_start=Tick monitor started.\nBefore the monitor becomes fully active, the server's average tick rate will be calculated over a period of 120 ticks (approx 6 seconds)."
 flare.message.tick_monitoring_end=§6Analysis is now complete.§r\n§f>§7 Max: %sms\n§f>§7 Min: %sms\n§f>§7 Average: %sms
-flare.message.tick_monitoring_report=§7Tick §8#%d §7lasted §6%s §7ms. (§6%s%% §7increased from average)
-flare.message.tick_monitoring_gc_report=§7Tick §8#%d §7included §4GC §7lasting §6%s §7ms. (Type = %s)
+flare.message.tick_monitoring_report=§7Tick §8#%s §7lasted §6%s §7ms. (§6%s%% §7increased from average)
+flare.message.tick_monitoring_gc_report=§7Tick §8#%s §7included §4GC §7lasting §6%s §7ms. (Type = %s)
 flare.message.tick_monitoring_disabled=Tick monitor disabled.
 flare.message.tps_statistics_recall=TPS from the last 5s, 10s, 1m, 5m, 15m:\n%s, %s, %s, %s, %s\n
 flare.message.tps_statistics_duration_averages=Tick durations (min/med/95%%ile/max ms) from the last 10s, 1m:\n%s ; %s\n

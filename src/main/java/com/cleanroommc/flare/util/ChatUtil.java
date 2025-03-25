@@ -8,6 +8,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -16,6 +17,7 @@ public final class ChatUtil {
     public static final String RAW_PREFIX = "[⚡] ";
     public static final ITextComponent RESET = new TextComponentString("");
     public static final ITextComponent PREFIX = new TextComponentString("[");
+    public static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("#.##");
 
     private static final Map<String, LangKeys> langKeys = new Object2ObjectOpenHashMap<>();
 

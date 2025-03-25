@@ -8,12 +8,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public enum LangKeys {
 
     // Modules
-    MONITORING_START_PERCENTAGE_CHANGE("flare.message.monitoring_start.percentage_change", "Starting now, any ticks with >%f %% increase in duration compared to the average will be reported."),
-    MONITORING_START_GREATER_DURATION("flare.message.monitoring_start.greater_duration", "Starting now, any ticks with duration >%f will be reported."),
+    MONITORING_START_PERCENTAGE_CHANGE("flare.message.monitoring_start.percentage_change", "Starting now, any ticks with at least a %s%% increase in duration compared to the average will be reported."),
+    MONITORING_START_GREATER_DURATION("flare.message.monitoring_start.greater_duration", "Starting now, any ticks with duration of %sms or longer will be reported."),
     TICK_MONITORING_START("flare.message.tick_monitoring_start", "Tick monitor started. Before the monitor becomes fully active, the server's average tick rate will be calculated over a period of 120 ticks (approx 6 seconds)."),
     TICK_MONITORING_END("flare.message.tick_monitoring_end", "Analysis is now complete.\n> Max: %sms\n> Min: %sms\n> Average: %sms"),
-    TICK_MONITORING_REPORT("flare.message.tick_monitoring_report", "Tick #%d lasted %s ms. (%s%% increased from average)"),
-    TICK_MONITORING_GC_REPORT("flare.message.tick_monitoring_gc_report", "Tick #%d included GC lasting %s ms. (Type = %s)"),
+    TICK_MONITORING_REPORT("flare.message.tick_monitoring_report", "Tick #%s lasted %sms. (%s%% increased from average)"),
+    TICK_MONITORING_GC_REPORT("flare.message.tick_monitoring_gc_report", "Tick #%s included GC lasting %s ms. (Type = %s)"),
     TICK_MONITORING_DISABLED("flare.message.tick_monitoring_disabled", "Tick monitor disabled."),
     TPS_STATISTICS_RECALL("flare.message.tps_statistics_recall", "TPS from the last 5s, 10s, 1m, 5m, 15m:\n%s, %s, %s, %s, %s\n"),
     TPS_STATISTICS_DURATION_AVERAGES("flare.message.tps_statistics_duration_averages", "Tick durations (min/med/95%%ile/max ms) from the last 10s, 1m:\n%s ; %s\n"),
