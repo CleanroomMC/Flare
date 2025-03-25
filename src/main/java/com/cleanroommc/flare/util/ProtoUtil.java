@@ -40,7 +40,10 @@ import com.cleanroommc.flare.proto.FlareSamplerProtos.SamplerMetadata.DataAggreg
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
@@ -286,7 +289,9 @@ public final class ProtoUtil {
         builder.setTotalEntities(entities.size());
         Map<String, Integer> nameMapping = new Object2ObjectOpenHashMap<>();
         for (Entity entity : entities) {
-            String name = entity.getName();
+            // TODO resolve item metas
+            ResourceLocation key = entity instanceof EntityItem ? ((EntityItem) entity).getItem().getItem().getRegistryName() : EntityList.getKey(entity);
+            String name = key == null ? entity.getName() : key.toString();
             nameMapping.compute(name, (k, v) -> v == null ? 1 : v + 1);
         }
         builder.putAllEntityCounts(nameMapping);
