@@ -12,7 +12,6 @@ public class SamplerTreeCommand extends CommandTreeBase {
     public SamplerTreeCommand(Side side, FlareAPI flare) {
         addSubcommand(new SamplerStartCommand(side, flare));
         addSubcommand(new SamplerInfoCommand(flare));
-        // TODO: addSubcommand(new SamplerUploadCommand(flare));
         addSubcommand(new SamplerViewCommand(flare));
         addSubcommand(new SamplerTrustViewerCommand(flare));
         addSubcommand(new SamplerStopCommand(flare, true));

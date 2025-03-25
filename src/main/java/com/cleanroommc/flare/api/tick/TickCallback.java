@@ -6,13 +6,9 @@ public interface TickCallback {
 
     Side getSide();
 
-    default void onTickStart(int currentTick, double duration) {
+    default void onTickStart(int currentTick, double duration) { }
 
-    }
-
-    default void onTickEnd(int currentTick, double duration) {
-
-    }
+    default void onTickEnd(int currentTick, double duration) { }
 
 }
 

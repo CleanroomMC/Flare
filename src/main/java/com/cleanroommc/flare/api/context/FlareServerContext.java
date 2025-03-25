@@ -3,6 +3,7 @@ package com.cleanroommc.flare.api.context;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.world.World;
@@ -52,10 +53,15 @@ public interface FlareServerContext {
     }
 
     default List<EntityPlayerMP> players() {
-        if (server() == null) {
+        MinecraftServer server = server();
+        if (server == null) {
             return Collections.emptyList();
         }
-        return server().getPlayerList().getPlayers();
+        PlayerList playerList = server.getPlayerList();
+        if (playerList == null) {
+            return Collections.emptyList();
+        }
+        return playerList.getPlayers();
     }
 
     default List<Entity> entities() {
