@@ -40,7 +40,7 @@ public final class FlareClientEvents {
         if (FlareKeybindings.startSampling()) {
             Minecraft.getMinecraft().player.sendChatMessage("/flare sampler start");
         } else if (FlareKeybindings.startClientSampling()) {
-            Minecraft.getMinecraft().player.sendChatMessage("/flare sampler start --client");
+            Minecraft.getMinecraft().player.sendChatMessage("/flarec sampler start");
         } else if (FlareKeybindings.stopSampling() || FlareKeybindings.stopClientSampling()) {
             Minecraft.getMinecraft().player.sendChatMessage("/flare sampler stop");
         }
