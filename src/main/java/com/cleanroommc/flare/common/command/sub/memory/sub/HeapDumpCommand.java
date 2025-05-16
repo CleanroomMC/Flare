@@ -42,7 +42,7 @@ public class HeapDumpCommand extends FlareSubCommand {
             System.gc();
         }
         Path heapDumpDir = this.flare.saveDirectory().resolve("heap").resolve("dump");
-        String fileName = new SimpleDateFormat("yyyy-MM-dd-hh_mm").format(new Date()) + (HeapDump.isOpenJ9() ? ".phd" : ".hprof");
+        String fileName = new SimpleDateFormat("yyyy-MM-dd-hh_mm_ss").format(new Date()) + (HeapDump.isOpenJ9() ? ".phd" : ".hprof");
         Path heapDumpFile = heapDumpDir.resolve(fileName);
         sendMessage(sender, LangKeys.HEAP_DUMP_WAIT);
         try {
