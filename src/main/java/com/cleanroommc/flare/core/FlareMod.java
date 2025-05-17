@@ -69,6 +69,8 @@ public class FlareMod extends DummyModContainer {
         if (event.getSide().isClient()) {
             ClientCommandHandler.instance.registerCommand(new FlareClientCommand(FlareAPI.getInstance()));
         }
+        CpuMonitor.ensureMonitoring();
+        NetworkMonitor.ensureMonitoring();
     }
 
     @Subscribe
@@ -79,8 +81,6 @@ public class FlareMod extends DummyModContainer {
     @Subscribe
     public void onServerStarted(FMLServerStartedEvent event) {
         ((Flare) FlareAPI.getInstance()).logServerStartTime();
-        CpuMonitor.ensureMonitoring();
-        NetworkMonitor.ensureMonitoring();
     }
 
 }
