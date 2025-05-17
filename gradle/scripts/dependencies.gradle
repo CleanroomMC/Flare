@@ -21,14 +21,28 @@ repositories {
     mavenLocal() // Must be last for caching to work
 }
 
+configurations {
+    asyncProfiler
+    implementation.extendsFrom(asyncProfiler)
+}
+
 dependencies {
     embed 'com.google.protobuf:protobuf-javalite:3.21.6'
     embed 'com.neovisionaries:nv-websocket-client:2.14'
     embed 'me.lucko:bytesocks-java-client-api:1.0-SNAPSHOT'
-    embed 'com.github.jvm-profiling-tools:async-profiler:v2.8.3'
 
-    // TODO
-    // embed 'tools.profiler:async-profiler:3.0'
+    asyncProfiler 'tools.profiler:async-profiler:4.0'
 
     implementation 'com.cleanroommc:configanytime:2.0'
+}
+
+jar {
+    from(provider{ configurations.asyncProfiler.collect {it.isDirectory() ? it : zipTree(it)} }) {
+        eachFile {
+            if (it.path.endsWith('.so')) {
+                it.path = "async-profiler/${it.path}"
+            }
+        }
+    }
+    includeEmptyDirs = false
 }

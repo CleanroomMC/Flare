@@ -136,21 +136,23 @@ public class AsyncProfilerAccess {
 
     private static AsyncProfiler load(FlareAPI flare) throws Exception {
         // Check compatibility
-        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT).replace(" ", "");
-        String arch = System.getProperty("os.arch").toLowerCase(Locale.ROOT);
-        if (os.equals("linux") && arch.equals("amd64") && isLinuxMusl()) {
-            arch = "amd64-musl";
-        }
-        Table<String, String, String> supported = ImmutableTable.<String, String, String>builder()
-                .put("linux", "amd64", "linux/amd64/libasyncProfiler.so")
-                .put("linux", "aarch64", "linux/aarch64/libasyncProfiler.so")
-                .put("macosx", "amd64", "macos/libasyncProfiler.dylib")
-                .put("macosx", "aarch64", "macos/libasyncProfiler.dylib")
-                .build();
-        String libPath = supported.get(os, arch);
-        if (libPath == null) {
+        String os = System.getProperty("os.name").toLowerCase();
+        String arch = System.getProperty("os.arch").toLowerCase();
+        String dir;
+        if (os.contains("linux")) {
+            if (arch.equals("amd64") || arch.equals("x86_64") || arch.contains("x64")) {
+                dir = "linux-x64";
+            } else if (arch.equals("aarch64") || arch.contains("arm64")) {
+                dir = "linux-arm64";
+            } else {
+                throw new UnsupportedSystemException(os, arch);
+            }
+        } else if (os.contains("mac")) {
+            dir = "macos";
+        } else {
             throw new UnsupportedSystemException(os, arch);
         }
+        String libPath = dir + "/libasyncProfiler.so";
         // Extract the profiler binary from the spark jar file
         String resource = "async-profiler/" + libPath;
         URL profilerResource = AsyncProfilerAccess.class.getClassLoader().getResource(resource);

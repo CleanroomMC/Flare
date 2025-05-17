@@ -136,7 +136,14 @@ public class AsyncSampler extends AbstractSampler {
         if (delay <= 0) {
             return;
         }
-        this.scheduler.schedule(() -> stop(false), delay, TimeUnit.MILLISECONDS);
+        this.scheduler.schedule(() -> {
+            try {
+                this.stop(false);
+                this.future.complete(this);
+            } catch (Exception e) {
+                this.future.completeExceptionally(e);
+            }
+        }, delay, TimeUnit.MILLISECONDS);
         /*
         this.scheduler.schedule(() -> {
             stop(false);
