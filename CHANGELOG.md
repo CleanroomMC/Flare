@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.1] - 2025-05-19
+
+### Changed
+- Updated Async Profiler to 4.0
+- Added seconds to file name for heap dumps
+- Moved `System::gc` call later, just before the heap dump is executed
+
+### Fixed
+- Async Profiler not working after update
+- Cpu/Network modules not initializing earlier
+
 ## [0.5.0] - 2025-03-25
 
 ### Added
