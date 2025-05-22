@@ -40,6 +40,7 @@ public final class ChatUtil {
     }
 
     public static void sendMessage(FlareAPI flare, ICommandSender sender, ITextComponent textComponent) {
+        textComponent = ChatUtil.prefix(textComponent);
         if (sender == null) {
             flare.logger().warn(textComponent.getUnformattedText());
         } else {

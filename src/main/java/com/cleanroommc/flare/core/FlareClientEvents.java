@@ -21,17 +21,17 @@ public final class FlareClientEvents {
 
     FlareClientEvents() { }
 
-    @SubscribeEvent
-    public static void onClientChatReceived(ClientChatReceivedEvent event) {
-        if (event.getType() == ChatType.SYSTEM) {
-            ITextComponent message = event.getMessage();
-            if (message instanceof TextComponentTranslation) {
-                if (((TextComponentTranslation) message).getKey().startsWith("flare.")) {
-                    event.setMessage(ChatUtil.prefix(message));
-                }
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onClientChatReceived(ClientChatReceivedEvent event) {
+//        if (event.getType() == ChatType.SYSTEM) {
+//            ITextComponent message = event.getMessage();
+//            if (message instanceof TextComponentTranslation) {
+//                if (((TextComponentTranslation) message).getKey().startsWith("flare.")) {
+//                    event.setMessage(ChatUtil.prefix(message));
+//                }
+//            }
+//        }
+//    }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
