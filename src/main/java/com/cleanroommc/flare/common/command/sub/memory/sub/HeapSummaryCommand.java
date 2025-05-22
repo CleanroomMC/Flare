@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class HeapSummaryCommand extends FlareSubCommand {
 
@@ -27,6 +29,11 @@ public class HeapSummaryCommand extends FlareSubCommand {
     @Override
     public String getName() {
         return "summary";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.singletonList("s");
     }
 
     @Override

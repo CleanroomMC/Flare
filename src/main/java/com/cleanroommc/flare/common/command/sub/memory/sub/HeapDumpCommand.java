@@ -15,7 +15,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.GZIPOutputStream;
@@ -29,6 +31,11 @@ public class HeapDumpCommand extends FlareSubCommand {
     @Override
     public String getName() {
         return "dump";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.singletonList("d");
     }
 
     @Override
