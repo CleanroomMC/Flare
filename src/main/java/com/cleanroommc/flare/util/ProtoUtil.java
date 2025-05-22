@@ -173,6 +173,10 @@ public final class ProtoUtil {
         return builder.build();
     }
 
+    public static Map<String, String> getExtraMetadata(FlareAPI flare) {
+        return flare.metadataProvider() != null ? flare.metadataProvider().export() : Collections.emptyMap();
+    }
+
     // TODO: query if a GPU section is possible
     public static SystemStatistics.Cpu getCpuProto() {
         return SystemStatistics.Cpu.newBuilder()

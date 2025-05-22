@@ -166,10 +166,7 @@ public abstract class AbstractSampler implements Sampler {
         builder.setPlatformStatistics(ProtoUtil.getPlatformStatsProto(this.flare, this.side, true, getInitialGcStats()));
         builder.setSystemStatistics(ProtoUtil.getSystemStatsProto());
 
-        MetadataProvider extraMetadataProvider = flare.metadataProvider();
-        if (extraMetadataProvider != null) {
-            builder.putAllExtraPlatformMetadata(extraMetadataProvider.export());
-        }
+        builder.putAllExtraPlatformMetadata(ProtoUtil.getExtraMetadata(this.flare));
 
         for (SourceMetadata sourceMetadata : flare.sourceMetadata()) {
             builder.putSources(sourceMetadata.name().toLowerCase(Locale.ROOT), ProtoUtil.getSourceMetadataProto(sourceMetadata));
