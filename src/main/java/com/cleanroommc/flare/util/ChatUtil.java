@@ -23,9 +23,9 @@ public final class ChatUtil {
 
     static {
         RESET.getStyle().setColor(TextFormatting.RESET);
-        PREFIX.getStyle().setColor(TextFormatting.DARK_GRAY).setBold(true);
+        PREFIX.getStyle().setColor(TextFormatting.DARK_GRAY);
         ITextComponent symbol = new TextComponentString("⚡");
-        symbol.getStyle().setColor(TextFormatting.YELLOW).setBold(true);
+        symbol.getStyle().setColor(TextFormatting.YELLOW);
         PREFIX.appendSibling(symbol);
         ITextComponent closingBracket = new TextComponentString("] ");
         closingBracket.getStyle().setColor(TextFormatting.DARK_GRAY);
