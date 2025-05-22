@@ -8,6 +8,7 @@ import com.cleanroommc.flare.common.command.sub.component.tick.TickMonitoringCom
 import com.cleanroommc.flare.common.command.sub.memory.HeapTreeCommand;
 import com.cleanroommc.flare.common.command.sub.sampler.SamplerTreeCommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.command.CommandTreeBase;
 
@@ -33,6 +34,16 @@ public class FlareCommand extends CommandTreeBase {
     @Override
     public String getUsage(ICommandSender sender) {
         return "/flare [command]";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return server == null || !server.isDedicatedServer() || super.checkPermission(server, sender);
     }
 
 }
