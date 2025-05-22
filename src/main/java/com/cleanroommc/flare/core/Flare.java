@@ -37,6 +37,7 @@ import me.lucko.bytesocks.client.BytesocksClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
@@ -228,6 +229,10 @@ public class Flare implements FlareAPI, FlareClientAPI {
     public void syncWithServer(Runnable runnable) {
         MinecraftServer server = server();
         if (server == null) {
+            if (FMLLaunchHandler.side().isClient()) {
+                this.syncWithClient(runnable);
+                return;
+            }
             throw new IllegalStateException("Server isn't active!");
         }
         server.addScheduledTask(runnable);
