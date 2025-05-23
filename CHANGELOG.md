@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0] - 2025-05-23
+
+### Added
+- Shorthand aliases for heap dump and summary commands (/flare heap d, /flare heap s)
+
+### Changed
+- Made commands privileged for dedicated servers
+- Applied prefix to all Flare messages (#10)
+
+### Fixed
+- Crash when syncWithServer was called on the client
+- Having bold styling for messages (#9)
+
 ## [0.5.1] - 2025-05-19
 
 ### Changed
