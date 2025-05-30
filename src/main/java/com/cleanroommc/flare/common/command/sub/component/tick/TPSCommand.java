@@ -10,6 +10,7 @@ import com.cleanroommc.flare.util.StatisticFormatter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import com.cleanroommc.flare.util.ChatUtil;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
@@ -73,10 +74,12 @@ public class TPSCommand extends FlareSubCommand {
                 StatisticFormatter.formatTps(stats.tps5Min()),
                 StatisticFormatter.formatTps(stats.tps15Min()));
         if (stats.isDurationSupported()) {
+            sendMessage(sender, ChatUtil.RESET);
             sendMessage(sender, LangKeys.TPS_STATISTICS_DURATION_AVERAGES,
                     StatisticFormatter.formatTickDurations(stats.duration10Sec()),
                     StatisticFormatter.formatTickDurations(stats.duration1Min()));
         }
+        sendMessage(sender, ChatUtil.RESET);
         sendMessage(sender, LangKeys.CPU_USAGE_SYSTEM_LOAD,
                 StatisticFormatter.formatCpuUsage(CpuMonitor.systemLoad10SecAvg()),
                 StatisticFormatter.formatCpuUsage(CpuMonitor.systemLoad1MinAvg()),
