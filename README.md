@@ -14,7 +14,7 @@ flare is made up these separate components:
 * **Memory Inspection**: Diagnose memory issues.
 * **Server Health Reporting**: Keep track of overall server health.
 
-### :zap: CPU Profiler
+### :sparkles: CPU Profiler
 
 flare's profiler can be used to diagnose performance issues: "lag", low tick rate, high CPU usage, etc.
 

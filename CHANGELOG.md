@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.0] - 2025-05-30
+
+### Added
+- New icon for flare messages
+
+### Fixed
+- Several issues and typos, thanks to @Ecdcaeb
+- Redundant object copies being made when sending messages
+- An unused map allocating memory
+
 ## [0.6.0] - 2025-05-23
 
 ### Added
