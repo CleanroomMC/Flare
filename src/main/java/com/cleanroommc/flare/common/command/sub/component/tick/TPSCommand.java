@@ -67,6 +67,7 @@ public class TPSCommand extends FlareSubCommand {
             return;
         }
         TickStatistics stats = this.flare.tickStatistics(this.side, tickType);
+        sendMessage(sender, ChatUtil.RESET);
         sendMessage(sender, LangKeys.TPS_STATISTICS_RECALL,
                 StatisticFormatter.formatTps(stats.tps5Sec()),
                 StatisticFormatter.formatTps(stats.tps10Sec()),
