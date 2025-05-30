@@ -81,10 +81,6 @@ public class TPSCommand extends FlareSubCommand {
                 StatisticFormatter.formatCpuUsage(CpuMonitor.systemLoad10SecAvg()),
                 StatisticFormatter.formatCpuUsage(CpuMonitor.systemLoad1MinAvg()),
                 StatisticFormatter.formatCpuUsage(CpuMonitor.systemLoad15MinAvg()));
-        sendMessage(sender, LangKeys.CPU_USAGE_SYSTEM_LOAD,
-                StatisticFormatter.formatCpuUsage(CpuMonitor.processLoad10SecAvg()),
-                StatisticFormatter.formatCpuUsage(CpuMonitor.processLoad1MinAvg()),
-                StatisticFormatter.formatCpuUsage(CpuMonitor.processLoad15MinAvg()));
     }
 
 }
