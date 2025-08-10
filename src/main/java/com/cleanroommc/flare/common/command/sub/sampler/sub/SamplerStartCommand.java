@@ -99,7 +99,7 @@ public class SamplerStartCommand extends FlareSubCommand {
                         break;
                 }
             }
-            // Misc Flags
+            int ticksOver = getIntArgValue(args, "only-ticks-over");
             boolean ignoreSleeping = hasArg(args, "ignore-sleeping");
             boolean ignoreNative = hasArg(args, "ignore-native");
             boolean forceJavaSampler = hasArg(args, "force-java-sampler");
@@ -112,6 +112,9 @@ public class SamplerStartCommand extends FlareSubCommand {
                     .ignoreSleeping(ignoreSleeping)
                     .ignoreNative(ignoreNative)
                     .forceJavaSampler(forceJavaSampler);
+            if (ticksOver != -1) {
+                samplerBuilder.ticksOver(ticksOver, this.flare.tickRoutine(this.side));
+            }
             if (timeoutSeconds != -1) {
                 samplerBuilder.completeAfter(timeoutSeconds, TimeUnit.SECONDS);
             }
