@@ -37,13 +37,35 @@ public final class OperatingSystemInfo {
             }
         }
 
-        for (String line : WindowsReg.OS_GET_CAPTION.read()) {
+        String winName = null;
+        String winBuild = null;
+
+        for (String line : WindowsReg.OS_GET_INFO.read()) {
             String trimmed = line.trim();
+
             if (trimmed.startsWith("ProductName")) {
                 int index = trimmed.indexOf("REG_SZ");
                 if (index != -1) {
-                    name = trimmed.substring(index + 6).trim();
+                    winName = trimmed.substring(index + 6).trim();
                 }
+            }
+            else if (trimmed.startsWith("CurrentBuild")) {
+                int index = trimmed.indexOf("REG_SZ");
+                if (index != -1) {
+                    winBuild = trimmed.substring(index + 6).trim();
+                }
+            }
+
+            if (winName != null && winBuild != null) {
+                break;
+            }
+        }
+
+        if (winName != null) {
+            if (winBuild != null && !winBuild.isEmpty()) {
+                name = winName + " (Build " + winBuild + ")";
+            } else {
+                name = winName;
             }
         }
 
