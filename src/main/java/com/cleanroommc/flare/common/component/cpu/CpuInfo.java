@@ -1,7 +1,7 @@
 package com.cleanroommc.flare.common.component.cpu;
 
 import com.cleanroommc.flare.common.component.os.LinuxProc;
-import com.cleanroommc.flare.common.component.os.WindowsWmic;
+import com.cleanroommc.flare.common.component.os.WindowsReg;
 
 import java.util.regex.Pattern;
 
@@ -25,9 +25,13 @@ public final class CpuInfo {
             }
         }
 
-        for (String line : WindowsWmic.CPU_GET_NAME.read()) {
-            if (line.startsWith("Name")) {
-                return line.substring(5).trim();
+        for (String line : WindowsReg.CPU_GET_NAME.read()) {
+            String trimmed = line.trim();
+            if (trimmed.startsWith("ProcessorNameString")) {
+                int index = trimmed.indexOf("REG_SZ");
+                if (index != -1) {
+                    return trimmed.substring(index + 6).trim();
+                }
             }
         }
 

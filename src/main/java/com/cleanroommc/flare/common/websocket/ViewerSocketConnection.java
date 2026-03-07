@@ -85,7 +85,7 @@ public class ViewerSocketConnection implements BytesocksClient.Listener, AutoClo
      * @return the channel id
      */
     public String getChannelId() {
-        return this.socket.getChannelId();
+        return this.socket.channelId();
     }
 
     /**
@@ -98,7 +98,7 @@ public class ViewerSocketConnection implements BytesocksClient.Listener, AutoClo
     }
 
     @Override
-    public void onText(CharSequence data) {
+    public void onText(String data) {
         try {
             RawPacket packet = decodeRawPacket(data);
             handleRawPacket(packet);
