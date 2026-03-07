@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -140,7 +139,7 @@ public class J8BytesocksClient implements BytesocksClient {
         }
 
         @Override
-        public String getChannelId() {
+        public String channelId() {
             return this.id;
         }
 
@@ -150,7 +149,7 @@ public class J8BytesocksClient implements BytesocksClient {
         }
 
         @Override
-        public CompletableFuture<?> send(CharSequence msg) {
+        public void send(String msg) {
             WebSocketFrame targetFrame = WebSocketFrame.createTextFrame(msg.toString());
             // Split ourselves so we know what the last frame was
             List<WebSocketFrame> splitFrames;
@@ -165,21 +164,23 @@ public class J8BytesocksClient implements BytesocksClient {
             // FIXME this code is not really that efficient (allocating a whole new CompletableFuture for every frame),
             //  but it's the simplest solution for now and seems to be good enough. We have to track all frames to correctly
             //  report errors/success
-            List<CompletableFuture<?>> futures = new ArrayList<>();
             for (WebSocketFrame frame : splitFrames) {
                 CompletableFuture<?> future = new CompletableFuture<>();
                 synchronized (frameFutures) {
                     frameFutures.put(frame, future);
                 }
-                futures.add(future);
                 this.ws.sendFrame(frame);
             }
-            return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         }
 
         @Override
         public void close(int statusCode, String reason) {
             this.ws.sendClose(statusCode, reason);
+        }
+
+        @Override
+        public void closeGracefully(int statusCode, String reason) {
+            this.close(statusCode, reason);
         }
     }
 

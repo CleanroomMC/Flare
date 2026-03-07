@@ -29,7 +29,7 @@ configurations {
 dependencies {
     embed 'com.google.protobuf:protobuf-javalite:3.21.6'
     embed 'com.neovisionaries:nv-websocket-client:2.14'
-    embed 'me.lucko:bytesocks-java-client-api:1.0-20250630.190826-1'
+    embed 'me.lucko:bytesocks-java-client:1.0-SNAPSHOT'
 
     asyncProfiler 'tools.profiler:async-profiler:4.0'
 

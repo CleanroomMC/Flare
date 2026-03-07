@@ -37,15 +37,13 @@ public final class OperatingSystemInfo {
             }
         }
 
-        for (String line : WindowsWmic.OS_GET_CAPTION_AND_VERSION.read()) {
-            if (line.startsWith("Caption") && line.length() > 18) {
-                // Caption=Microsoft Windows something
-                // \----------------/ = 18 chars
-                name = line.substring(18).trim();
-            } else if (line.startsWith("Version")) {
-                // Version=10.0.something
-                // \------/ = 8 chars
-                version = line.substring(8).trim();
+        for (String line : WindowsReg.OS_GET_CAPTION.read()) {
+            String trimmed = line.trim();
+            if (trimmed.startsWith("ProductName")) {
+                int index = trimmed.indexOf("REG_SZ");
+                if (index != -1) {
+                    name = trimmed.substring(index + 6).trim();
+                }
             }
         }
 
