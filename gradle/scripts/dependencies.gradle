@@ -31,7 +31,7 @@ dependencies {
     embed 'com.neovisionaries:nv-websocket-client:2.14'
     embed 'me.lucko:bytesocks-java-client:1.0-SNAPSHOT'
 
-    asyncProfiler 'tools.profiler:async-profiler:4.0'
+    asyncProfiler 'tools.profiler:async-profiler:4.2'
 
     implementation 'com.cleanroommc:configanytime:2.0'
 }
