@@ -23,7 +23,7 @@ public enum WindowsReg {
      * Modern JVMs handle OS name/version natively via System.getProperty,
      * but this is retained if native registry readout is strictly needed.
      */
-    OS_GET_CAPTION("reg", "query", "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "/v", "ProductName");
+    OS_GET_INFO("reg", "query", "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
 
     private static final boolean SUPPORTED = System.getProperty("os.name").startsWith("Windows");
 
