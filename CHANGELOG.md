@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0] - 2026-04-02
+
+### Added
+- `--only-ticks-over` feature in samplers
+
+### Changed
+- Updated AsyncProfiler to 4.2 (Thanks @HaHaWTH)
+
+### Fixed
+- Issues pertaining uploading of reports
+- Deprecation of WindowsWmic, uses registry queries now (Thanks @HaHaWTH)
+
 ## [0.7.0] - 2025-05-30
 
 ### Added
