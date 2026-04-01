@@ -3,6 +3,7 @@
  */
 
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
 plugins {
@@ -14,6 +15,7 @@ plugins {
     id 'com.google.protobuf' version '0.9.4'
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'org.jetbrains.changelog' version '2.5.0'
 }
 
 apply from: 'gradle/scripts/helpers.gradle'
@@ -250,6 +252,19 @@ test {
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(8)
     })
+}
+
+String parserChangelog() {
+    if (!file('CHANGELOG.md').exists()) {
+        throw new GradleException('publish_with_changelog is true, but CHANGELOG.md does not exist in the workspace!')
+    }
+    String parsedChangelog = changelog.renderItem(
+            changelog.get(propertyString('mod_version')).withHeader(false).withEmptySections(false),
+            Changelog.OutputType.MARKDOWN)
+    if (parsedChangelog.isEmpty()) {
+        throw new GradleException('publish_with_changelog is true, but the changelog for the latest version is empty!')
+    }
+    return parsedChangelog
 }
 
 tasks.register('generateMixinJson') {
