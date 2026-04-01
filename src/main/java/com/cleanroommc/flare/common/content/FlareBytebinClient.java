@@ -41,7 +41,7 @@ public class FlareBytebinClient implements BytebinClient {
 
     @Override
     public String bytebinUrl() {
-        return "https://bytebin.lucko.me/";
+        return "https://spark-usercontent.lucko.me/";
     }
 
     @Override
