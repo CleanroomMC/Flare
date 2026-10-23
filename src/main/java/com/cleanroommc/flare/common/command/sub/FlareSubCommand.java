@@ -1,11 +1,13 @@
 package com.cleanroommc.flare.common.command.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.common.command.FlareCommand;
 import com.cleanroommc.flare.util.ChatUtil;
 import com.cleanroommc.flare.util.LangKeys;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -22,6 +24,11 @@ public abstract class FlareSubCommand extends CommandBase {
 
     public FlareSubCommand(FlareAPI flare) {
         this.flare = flare;
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return FlareCommand.isClientSender(sender) || super.checkPermission(server, sender);
     }
 
     protected boolean hasNoArgs(String[] arguments) {

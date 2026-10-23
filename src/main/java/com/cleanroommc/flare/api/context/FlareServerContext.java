@@ -37,6 +37,35 @@ public interface FlareServerContext {
         return Arrays.asList(server().worlds);
     }
 
+    /**
+     * How many entities, tile entities and chunks are loaded, from sizes alone: the sampler threads ask every window,
+     * and copying the server's lists while the server thread changes them threw ConcurrentModificationException and
+     * lost the window.
+     */
+    default int entityCount() {
+        int count = 0;
+        for (World world : worlds()) {
+            count += world.loadedEntityList.size();
+        }
+        return count;
+    }
+
+    default int tileEntityCount() {
+        int count = 0;
+        for (World world : worlds()) {
+            count += world.loadedTileEntityList.size();
+        }
+        return count;
+    }
+
+    default int chunkCount() {
+        int count = 0;
+        for (World world : worlds()) {
+            count += ((ChunkProviderServer) world.getChunkProvider()).getLoadedChunks().size();
+        }
+        return count;
+    }
+
     default List<Chunk> chunks() {
         return worlds().stream()
                 .map(this::chunks)

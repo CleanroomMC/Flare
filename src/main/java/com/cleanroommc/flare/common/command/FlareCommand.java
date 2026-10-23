@@ -9,6 +9,7 @@ import com.cleanroommc.flare.common.command.sub.memory.HeapTreeCommand;
 import com.cleanroommc.flare.common.command.sub.sampler.SamplerTreeCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.command.CommandTreeBase;
 
@@ -43,7 +44,15 @@ public class FlareCommand extends CommandTreeBase {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return server == null || !server.isDedicatedServer() || super.checkPermission(server, sender);
+        return isClientSender(sender) || server == null || !server.isDedicatedServer() || super.checkPermission(server, sender);
+    }
+
+    /**
+     * /flarec runs on the player's own game, so any player may use it there, op or not
+     */
+    public static boolean isClientSender(ICommandSender sender) {
+        World world = sender.getEntityWorld();
+        return world != null && world.isRemote;
     }
 
 }

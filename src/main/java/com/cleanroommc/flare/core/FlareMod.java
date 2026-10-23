@@ -50,6 +50,7 @@ public class FlareMod extends DummyModContainer {
 
     @Subscribe
     public void onConstruct(FMLConstructionEvent event) {
+        ((Flare) FlareAPI.getInstance()).markForgeLoaded();
         GpuInfo.queryGpuModel(); // Earliest
     }
 

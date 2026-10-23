@@ -2,7 +2,9 @@ package com.cleanroommc.flare.common.command.sub.sampler;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.common.command.sub.sampler.sub.*;
+import com.cleanroommc.flare.common.command.FlareCommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.command.CommandTreeBase;
 
@@ -26,6 +28,11 @@ public class SamplerTreeCommand extends CommandTreeBase {
     @Override
     public String getUsage(ICommandSender sender) {
         return "/flare sampler [command]";
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return FlareCommand.isClientSender(sender) || super.checkPermission(server, sender);
     }
 
 }
