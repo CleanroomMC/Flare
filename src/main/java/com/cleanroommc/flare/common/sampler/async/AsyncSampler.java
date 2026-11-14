@@ -56,6 +56,11 @@ public class AsyncSampler extends AbstractSampler {
         return this.sampleCollector.mode();
     }
 
+    @Override
+    public void whenComplete(BiConsumer<Sampler, Throwable> biConsumer) {
+        this.future.whenCompleteAsync(biConsumer, this.scheduler);
+    }
+
     /**
      * Starts the profiler.
      */
@@ -138,8 +143,9 @@ public class AsyncSampler extends AbstractSampler {
         }
         this.scheduler.schedule(() -> {
             try {
-                this.stop(false);
-                this.future.complete(this);
+                if (this.scheduler != null) {
+                    this.future.complete(this);
+                }
             } catch (Exception e) {
                 this.future.completeExceptionally(e);
             }
@@ -173,7 +179,6 @@ public class AsyncSampler extends AbstractSampler {
         }
 
         if (this.scheduler != null) {
-            this.future.complete(this);
             this.scheduler.shutdown();
             this.scheduler = null;
         }

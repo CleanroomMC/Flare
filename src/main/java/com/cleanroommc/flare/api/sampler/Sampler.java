@@ -40,4 +40,9 @@ public interface Sampler {
      */
     boolean runningInBackground();
 
+    /**
+     * Run tasks after the Sampler is completed
+     */
+    void whenComplete(BiConsumer<Sampler, Throwable> biConsumer);
+
 }
