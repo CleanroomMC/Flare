@@ -132,12 +132,14 @@ public class FlareSamplerBuilder implements SamplerBuilder {
         int interval = (int) (this.mode == SamplerMode.EXECUTION ? this.interval * 1000D : this.interval);
 
         Sampler sampler;
-        if (this.mode == SamplerMode.ALLOCATION) {
-            sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Allocation(interval, this.allocLiveOnly),
-                    interval, this.threadDumper, this.endTime, this.runningInBackground);
-        } else if (canUseAsyncProfiler) {
-            sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Execution(interval), interval,
-                    this.threadDumper, this.endTime, this.runningInBackground);
+        if (canUseAsyncProfiler) {
+            if (this.mode == SamplerMode.ALLOCATION) {
+                sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Allocation(interval, this.allocLiveOnly),
+                        interval, this.threadDumper, this.endTime, this.runningInBackground);
+            } else {
+                sampler = new AsyncSampler(this.flare, this.side, this.threadGrouper, new SampleCollector.Execution(interval), interval,
+                        this.threadDumper, this.endTime, this.runningInBackground);
+            }
         } else if (onlyTicksOverMode) {
             sampler = new JavaSampler(this.flare, this.side, interval, this.threadDumper, this.endTime, this.runningInBackground,
                     this.ignoreSleeping, this.ignoreNative, this.threadGrouper, this.tickRoutine, this.ticksOver);
