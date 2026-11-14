@@ -46,7 +46,8 @@ public class SamplerStartCommand extends FlareSubCommand {
             sendMessage(sender, LangKeys.SAMPLER_ALREADY_STARTED);
         } else {
             // ExportProps
-            setExportProps(samplerContainer.getExportProps(), sender, args);
+            ExportProps exportProps = samplerContainer.getExportProps();
+            setExportProps(exportProps, sender, args);
             // Timeout
             int timeoutSeconds = getIntArgValue(args, "timeout");
             if (timeoutSeconds != -1) {
@@ -125,10 +126,9 @@ public class SamplerStartCommand extends FlareSubCommand {
                     sendMessage(sender, LangKeys.SAMPLER_FAILED_UNEXPECTEDLY, t.toString());
                     this.flare.logger().fatal(t);
                 } else {
-                    ExportProps.setDefault(this.flare, samplerContainer.getExportProps());
                     sendMessage(sender, LangKeys.SAMPLER_STOPPING);
                     s = samplerContainer.stopSampler(false);
-                    SamplerUtil.upload(this.flare, samplerContainer.getExportProps(),
+                    SamplerUtil.upload(this.flare, exportProps,
                             (k, c, a) -> sendMessage(sender, k, c, a), s, false, true);
                 }
             });
