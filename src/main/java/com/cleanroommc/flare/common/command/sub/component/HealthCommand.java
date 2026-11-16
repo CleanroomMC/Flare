@@ -3,6 +3,7 @@ package com.cleanroommc.flare.common.command.sub.component;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.tick.TickStatistics;
 import com.cleanroommc.flare.api.tick.TickType;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.common.component.disk.DiskUsage;
@@ -46,7 +47,7 @@ public class HealthCommand extends FlareSubCommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return Arrays.asList("--memory", "--network");
+        return CommandOptions.buildTabCompletion(args, CommandOptions.MEMORY, CommandOptions.NETWORK);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class HealthCommand extends FlareSubCommand {
                 FormatUtil.percent(heapUsage.getUsed(), heapUsage.getMax()),
                 StatisticFormatter.generateMemoryUsageDiagram(heapUsage, 60));
 
-        if (hasArg(args, "memory")) {
+        if (CommandOptions.MEMORY.hasIn(args)) {
             MemoryUsage nonHeapUsage = memoryBean.getNonHeapMemoryUsage();
             sendMessage(sender, LangKeys.DETAILED_MEMORY_USAGE_REPORT, FormatUtil.formatBytes(nonHeapUsage.getUsed()));
             for (MemoryPoolMXBean memoryPool : ManagementFactory.getMemoryPoolMXBeans()) {
@@ -118,7 +119,7 @@ public class HealthCommand extends FlareSubCommand {
     }
 
     private void sendNetworkStatistics(ICommandSender sender, String[] args) {
-        boolean detailed = hasArg(args, "network");
+        boolean detailed = CommandOptions.NETWORK.hasIn(args);
         List<Runnable> body = new ArrayList<>();
         for (Map.Entry<String, NetworkInterfaceAverages> entry : NetworkMonitor.systemAverages().entrySet()) {
             String interfaceName = entry.getKey();

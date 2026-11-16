@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.command.sub.memory.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDump;
 import com.cleanroommc.flare.util.FormatUtil;
@@ -8,8 +9,10 @@ import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.event.ClickEvent;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -44,6 +47,11 @@ public class HeapDumpCommand extends FlareSubCommand {
     }
 
     @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.RUN_GC_FIRST, CommandOptions.INCLUDE_NON_LIVE, CommandOptions.COMPRESS);
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         Path heapDumpDir = this.flare.saveDirectory().resolve("heap").resolve("dump");
         String fileName = new SimpleDateFormat("yyyy-MM-dd-hh_mm_ss").format(new Date()) + (HeapDump.isOpenJ9() ? ".phd" : ".hprof");
@@ -51,10 +59,10 @@ public class HeapDumpCommand extends FlareSubCommand {
         sendMessage(sender, LangKeys.HEAP_DUMP_WAIT);
         try {
             Files.createDirectories(heapDumpDir);
-            if (hasArg(args, "run-gc-first")) {
+            if (CommandOptions.RUN_GC_FIRST.hasIn(args)) {
                 System.gc();
             }
-            HeapDump.dumpHeap(heapDumpFile, !hasArg(args, "include-non-live"));
+            HeapDump.dumpHeap(heapDumpFile, !CommandOptions.INCLUDE_NON_LIVE.hasIn(args));
             sendMessage(sender, LangKeys.HEAP_DUMP_REPORT, text ->
                 text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, heapDumpFile.toFile().getAbsolutePath())),
                     heapDumpFile.getFileName());
@@ -64,7 +72,7 @@ public class HeapDumpCommand extends FlareSubCommand {
             return;
         }
 
-        if (hasArg(args, "compress")) {
+        if (CommandOptions.COMPRESS.hasIn(args)) {
             sendMessage(sender, LangKeys.COMPRESS_FILE_START, "heap dump");
             try {
                 long size = Files.size(heapDumpFile);

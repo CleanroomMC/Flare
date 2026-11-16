@@ -3,12 +3,18 @@ package com.cleanroommc.flare.common.command.sub.sampler.sub;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.sampler.Sampler;
 import com.cleanroommc.flare.api.sampler.SamplerContainer;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.sampler.ExportProps;
 import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 public class SamplerStopCommand extends FlareSubCommand {
 
@@ -33,6 +39,13 @@ public class SamplerStopCommand extends FlareSubCommand {
     }
 
     @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return this.cancel ? Collections.emptyList() :
+                CommandOptions.buildTabCompletion(args, CommandOptions.COMMENT, CommandOptions.SAVE_TO_FILE,
+                        CommandOptions.SEPARATE_PARENT_CALLS);
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         SamplerContainer<Sampler> samplerContainer = this.flare.samplerContainer();
         if (samplerContainer.isSamplerActive()) {
@@ -41,9 +54,9 @@ public class SamplerStopCommand extends FlareSubCommand {
                 samplerContainer.stopSampler(true);
                 return;
             }
-            final String comment = getArgValue(args, "comment");
-            final boolean separateParentCalls = hasArg(args, "separate-parent-calls");
-            final boolean saveToFile = hasArg(args, "save-to-file");
+            final String comment = CommandOptions.COMMENT.getValue(args);
+            final boolean separateParentCalls = CommandOptions.SEPARATE_PARENT_CALLS.hasIn(args);
+            final boolean saveToFile = CommandOptions.SAVE_TO_FILE.hasIn(args);
             ExportProps exportProps = samplerContainer.getExportProps();
             ExportProps.setDefault(this.flare, exportProps);
             if (comment != null) {

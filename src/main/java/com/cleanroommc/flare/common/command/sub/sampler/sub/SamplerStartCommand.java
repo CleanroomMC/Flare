@@ -8,14 +8,18 @@ import com.cleanroommc.flare.api.sampler.SamplerContainer;
 import com.cleanroommc.flare.api.sampler.SamplerMode;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadGrouper;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.sampler.ExportProps;
 import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +43,15 @@ public class SamplerStartCommand extends FlareSubCommand {
     }
 
     @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.TIMEOUT, CommandOptions.INTERVAL,
+                CommandOptions.ALLOC, CommandOptions.ALLOC_LIVE_ONLY, CommandOptions.THREAD,
+                CommandOptions.REGEX, CommandOptions.THREAD_GROUPER, CommandOptions.ONLY_TICKS_OVER,
+                CommandOptions.IGNORE_SLEEPING, CommandOptions.IGNORE_NATIVE, CommandOptions.FORCE_JAVA_SAMPLER,
+                CommandOptions.SEPARATE_PARENT_CALLS, CommandOptions.SAVE_TO_FILE, CommandOptions.COMMENT);
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         SamplerContainer<Sampler> samplerContainer = this.flare.samplerContainer();
         Sampler sampler = samplerContainer.activeSampler();
@@ -49,7 +62,7 @@ public class SamplerStartCommand extends FlareSubCommand {
             ExportProps exportProps = samplerContainer.getExportProps();
             setExportProps(exportProps, sender, args);
             // Timeout
-            int timeoutSeconds = getIntArgValue(args, "timeout");
+            int timeoutSeconds = CommandOptions.TIMEOUT.getValue(args);
             if (timeoutSeconds != -1) {
                 if (timeoutSeconds <= 10) {
                     sendMessage(sender, LangKeys.SAMPLER_START_TIMEOUT_TOO_SHORT);
@@ -59,16 +72,16 @@ public class SamplerStartCommand extends FlareSubCommand {
                 }
             }
             // SamplerMode
-            SamplerMode mode = hasArg(args, "alloc") ? SamplerMode.ALLOCATION : SamplerMode.EXECUTION;
+            SamplerMode mode = CommandOptions.ALLOC.hasIn(args) ? SamplerMode.ALLOCATION : SamplerMode.EXECUTION;
             // Allocate Live Only
-            boolean allocLiveOnly = hasArg(args, "alloc-live-only");
+            boolean allocLiveOnly = CommandOptions.ALLOC_LIVE_ONLY.hasIn(args);
             // Interval
-            int interval = getIntArgValue(args, "interval");
+            int interval = CommandOptions.INTERVAL.getValue(args);
             if (interval <= mode.interval()) {
                 interval = mode.interval();
             }
             // ThreadDumper
-            Set<String> threads = getArgValues(args, "thread");
+            Set<String> threads = CommandOptions.THREAD.getValue(args);
             ThreadDumper threadDumper;
             if (threads.isEmpty()) {
                 if (this.side.isClient()) {
@@ -79,7 +92,7 @@ public class SamplerStartCommand extends FlareSubCommand {
             } else if (threads.contains("*")) {
                 threadDumper = ThreadDumper.ALL;
             } else {
-                Set<String> regex = getArgValues(args, "regex");
+                Set<String> regex = CommandOptions.REGEX.getValue(args);
                 if (!regex.isEmpty()) {
                     threadDumper = new ThreadDumper.Regex(regex);
                 } else {
@@ -89,7 +102,7 @@ public class SamplerStartCommand extends FlareSubCommand {
             }
             // ThreadGrouper
             ThreadGrouper threadGrouper = ThreadGrouper.BY_POOL;
-            String threadGrouperValue = getArgValue(args, "thread-grouper");
+            String threadGrouperValue = CommandOptions.THREAD_GROUPER.getValue(args);
             if (threadGrouperValue != null) {
                 switch (threadGrouperValue) {
                     case "combine-all":
@@ -100,10 +113,10 @@ public class SamplerStartCommand extends FlareSubCommand {
                         break;
                 }
             }
-            int ticksOver = getIntArgValue(args, "only-ticks-over");
-            boolean ignoreSleeping = hasArg(args, "ignore-sleeping");
-            boolean ignoreNative = hasArg(args, "ignore-native");
-            boolean forceJavaSampler = hasArg(args, "force-java-sampler");
+            int ticksOver = CommandOptions.ONLY_TICKS_OVER.getValue(args);
+            boolean ignoreSleeping = CommandOptions.IGNORE_SLEEPING.hasIn(args);
+            boolean ignoreNative = CommandOptions.IGNORE_NATIVE.hasIn(args);
+            boolean forceJavaSampler = CommandOptions.FORCE_JAVA_SAMPLER.hasIn(args);
             SamplerBuilder samplerBuilder = this.flare.samplerBuilder()
                     .mode(mode)
                     .interval(interval)
@@ -139,10 +152,10 @@ public class SamplerStartCommand extends FlareSubCommand {
 
     private void setExportProps(ExportProps exportProps, ICommandSender sender, String[] args) {
         exportProps.creator(sender)
-                .separateParentCalls(hasArg(args, "separate-parent-calls"))
-                .saveToFile(hasArg(args, "save-to-file"));
+                .separateParentCalls(CommandOptions.SEPARATE_PARENT_CALLS.hasIn(args))
+                .saveToFile(CommandOptions.SAVE_TO_FILE.hasIn(args));
         ExportProps.setDefault(this.flare, exportProps);
-        String comment = getArgValue(args, "comment");
+        String comment = CommandOptions.COMMENT.getValue(args);
         if (comment != null) {
             exportProps.comment(comment);
         }

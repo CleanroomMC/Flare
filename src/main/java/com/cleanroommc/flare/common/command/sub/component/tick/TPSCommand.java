@@ -3,6 +3,7 @@ package com.cleanroommc.flare.common.command.sub.component.tick;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.tick.TickStatistics;
 import com.cleanroommc.flare.api.tick.TickType;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.util.LangKeys;
@@ -43,8 +44,13 @@ public class TPSCommand extends FlareSubCommand {
     }
 
     @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.TYPE);
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        String type = getArgValue(args, "type");
+        String type = CommandOptions.TYPE.getValue(args);
         if (type == null) {
             type = "all";
         }

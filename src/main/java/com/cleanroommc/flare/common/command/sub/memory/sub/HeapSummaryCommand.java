@@ -2,6 +2,7 @@ package com.cleanroommc.flare.common.command.sub.memory.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.content.BytebinClient;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDumpSummary;
 import com.cleanroommc.flare.proto.FlareHeapProtos.HeapData;
@@ -9,9 +10,11 @@ import com.cleanroommc.flare.util.LangKeys;
 import com.cleanroommc.flare.util.ProtoUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.ClickEvent.Action;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,8 +45,13 @@ public class HeapSummaryCommand extends FlareSubCommand {
     }
 
     @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.SAVE_LOCALLY, CommandOptions.RUN_GC_FIRST);
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        if (hasArg(args, "run-gc-first")) {
+        if (CommandOptions.RUN_GC_FIRST.hasIn(args)) {
             System.gc();
         }
         sendMessage(sender, LangKeys.HEAP_SUMMARY_WAIT);
@@ -56,7 +64,7 @@ public class HeapSummaryCommand extends FlareSubCommand {
             return;
         }
         HeapData heapData = ProtoUtil.getHeapDataProto(this.flare, sender, heapDump);
-        boolean saveLocally = hasArg(args, "save-locally");
+        boolean saveLocally = CommandOptions.SAVE_LOCALLY.hasIn(args);
         if (!saveLocally) {
             try {
                 String key = this.flare.bytebinClient().postContent(BytebinClient.FLARE_HEAP_MEDIA_TYPE, heapData);
