@@ -70,7 +70,8 @@ public class SamplerContainer<T extends Sampler> {
         if (stage == this.stage) {
             T sampler = this.stopSampler(cancelled);
             LocalDateTime current = LocalDateTime.now();
-            ExportProps.setDefault(this.flare, this.exportProps);
+            final ExportProps exportProps = this.exportProps;
+            ExportProps.setDefault(this.flare, exportProps);
             FlareAPI.getInstance().activityLog().write(new Activity() {
                 @Override
                 public LocalDateTime time() {
@@ -79,7 +80,7 @@ public class SamplerContainer<T extends Sampler> {
                 @Override
                 public String description() {
                     try {
-                        String url = SamplerUtil.upload(SamplerContainer.this.flare, SamplerContainer.this.exportProps, sampler, false, true);
+                        String url = SamplerUtil.upload(SamplerContainer.this.flare, exportProps, sampler, false, true);
                         return "Sampler finished for stage: " + stage + ". Report: " + url;
                     } catch (Throwable t) {
                         SamplerContainer.this.flare.logger().fatal("Unable to upload sampler report", t);

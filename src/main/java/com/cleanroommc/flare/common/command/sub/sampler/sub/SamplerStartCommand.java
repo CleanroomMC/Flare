@@ -59,7 +59,7 @@ public class SamplerStartCommand extends FlareSubCommand {
             sendMessage(sender, LangKeys.SAMPLER_ALREADY_STARTED);
         } else {
             // ExportProps
-            ExportProps exportProps = samplerContainer.getExportProps();
+            final ExportProps exportProps = samplerContainer.getExportProps();
             setExportProps(exportProps, sender, args);
             // Timeout
             int timeoutSeconds = CommandOptions.TIMEOUT.getValue(args);
