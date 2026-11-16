@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.command.sub;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.command.CommandBase;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -159,19 +160,16 @@ public class CommandOptions {
                     Arrays.stream(commandOptions).map(option -> option.arg).collect(Collectors.toList());
         }
 
-        List<String> suggestList = null;
-
         for (Option option: commandOptions) {
-            if (!(option instanceof StandaloneOption) && option.isLast(arguments)) {
+            if (option.isLast(arguments) && !(option instanceof StandaloneOption)) {
                 return Collections.singletonList(option.expected);
-            } else if (!option.hasIn(arguments)) {
-                if (suggestList == null) {
-                    suggestList = new ArrayList<>();
-                }
-                suggestList.add(option.arg);
             }
         }
 
-        return suggestList == null ? Collections.emptyList() : suggestList;
+        return Arrays.stream(commandOptions)
+            .filter(option -> !option.hasIn(arguments)
+                    && CommandBase.doesStringStartWith(arguments[arguments.length - 1], option.arg))
+            .map(option -> option.arg)
+            .collect(Collectors.toList());
     }
 }
