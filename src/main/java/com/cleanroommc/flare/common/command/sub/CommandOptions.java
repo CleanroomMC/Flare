@@ -86,6 +86,9 @@ public class CommandOptions {
             boolean foundArg = false;
             for (String argument : arguments) {
                 if (foundArg) {
+                    if (argument.startsWith(argPrefix)) {
+                        break;
+                    }
                     return argument;
                 }
                 if (argument.equalsIgnoreCase(arg)) {
@@ -108,6 +111,9 @@ public class CommandOptions {
             boolean foundArg = false;
             for (String argument : arguments) {
                 if (foundArg) {
+                    if (argument.startsWith(argPrefix)) {
+                        break;
+                    }
                     return new ObjectOpenHashSet<>(Arrays.asList(argument.split(",")));
                 }
                 if (argument.equalsIgnoreCase(arg)) {
@@ -134,6 +140,7 @@ public class CommandOptions {
                         return Integer.parseInt(argument);
                     } catch (NumberFormatException ignored) {
                         // TODO: send command when flag is found but arg is malformed
+                        break;
                     }
                 }
                 if (argument.equalsIgnoreCase(arg)) {
