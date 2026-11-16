@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.sampler.java;
 
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.api.sampler.Sampler;
 import com.cleanroommc.flare.api.sampler.SamplerMode;
 import com.cleanroommc.flare.api.sampler.thread.ThreadDumper;
 import com.cleanroommc.flare.api.sampler.thread.ThreadGrouper;
@@ -19,6 +20,7 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.IntPredicate;
 
 public class JavaSampler extends AbstractSampler implements Runnable {
@@ -55,6 +57,11 @@ public class JavaSampler extends AbstractSampler implements Runnable {
     @Override
     public SamplerMode mode() {
         return SamplerMode.EXECUTION;
+    }
+
+    @Override
+    public void whenComplete(BiConsumer<Sampler, Throwable> biConsumer) {
+        this.future.whenCompleteAsync(biConsumer, this.workerPool);
     }
 
     @Override
@@ -123,7 +130,6 @@ public class JavaSampler extends AbstractSampler implements Runnable {
         try {
             long time = System.currentTimeMillis();
             if (this.autoEndTime != -1 && this.autoEndTime <= time) {
-                stop(false);
                 this.future.complete(this);
                 return;
             }
