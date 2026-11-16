@@ -17,8 +17,10 @@ public final class LoaderUtil {
         cleanroomBuildField = buildField;
     }
 
+    // The spark viewer picks mappings by "<platform>/<minecraft version>" and only knows "forge/1.12.2" (MCP),
+    // so Cleanroom reports itself as Forge; the version still says Cleanroom.
     public static String getName() {
-        return cleanroomBuildField != null ? "Cleanroom" : "Forge";
+        return "Forge";
     }
 
     public static String getVersion() {
@@ -26,7 +28,7 @@ public final class LoaderUtil {
             return ForgeVersion.getVersion();
         }
         try {
-            return (String) cleanroomBuildField.get(null);
+            return "Cleanroom " + cleanroomBuildField.get(null);
         } catch (Throwable ignore) { }
         return ForgeVersion.getVersion();
     }

@@ -166,9 +166,9 @@ public class WindowStatisticsCollector {
 
         if (this.flare.server() != null) {
             builder.setPlayers(this.flare.players().size());
-            builder.setEntities(this.flare.entities().size());
-            builder.setTileEntities(this.flare.tileEntities().size());
-            builder.setChunks(this.flare.chunks().size());
+            builder.setEntities(this.flare.entityCount());
+            builder.setTileEntities(this.flare.tileEntityCount());
+            builder.setChunks(this.flare.chunkCount());
         }
 
         return builder.build();

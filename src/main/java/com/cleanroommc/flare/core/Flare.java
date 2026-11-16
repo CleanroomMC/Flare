@@ -69,6 +69,7 @@ public class Flare implements FlareAPI, FlareClientAPI {
 
     private ExecutorService asyncExecutor;
     private long serverStartTime = -1L;
+    private volatile boolean forgeLoaded;
     private GameThread serverThread;
     @SideOnly(Side.CLIENT)
     private GameThread clientThread;
@@ -94,6 +95,10 @@ public class Flare implements FlareAPI, FlareClientAPI {
         for (FlareTickStatistics statistics : this.serverTickStatistics.values()) {
             this.serverTickRoutine.addCallback(statistics);
         }
+    }
+
+    void markForgeLoaded() {
+        this.forgeLoaded = true;
     }
 
     void logServerStartTime() {
@@ -209,6 +214,9 @@ public class Flare implements FlareAPI, FlareClientAPI {
 
     @Override
     public MinecraftServer server() {
+        if (!this.forgeLoaded) {
+            return null;
+        }
         return FMLCommonHandler.instance().getMinecraftServerInstance();
     }
 
