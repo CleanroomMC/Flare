@@ -5,7 +5,6 @@ import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.client.command.FlareClientCommand;
 import com.cleanroommc.flare.common.command.FlareCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
-import com.cleanroommc.flare.common.component.gpu.GpuInfo;
 import com.cleanroommc.flare.common.component.network.NetworkMonitor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -46,11 +45,6 @@ public class FlareMod extends DummyModContainer {
     @Override
     public Class<?> getCustomResourcePackClass() {
         return FMLFileResourcePack.class;
-    }
-
-    @Subscribe
-    public void onConstruct(FMLConstructionEvent event) {
-        GpuInfo.queryGpuModel(); // Earliest
     }
 
     @Subscribe

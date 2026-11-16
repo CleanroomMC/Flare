@@ -2,6 +2,7 @@ package com.cleanroommc.flare.core.mixin;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.sampler.Sampler;
+import com.cleanroommc.flare.common.component.gpu.GpuInfo;
 import com.cleanroommc.flare.common.config.FlareConfiguration;
 import com.cleanroommc.flare.common.sampler.SamplingStage;
 import com.cleanroommc.flare.util.DefaultSampler;
@@ -24,6 +25,7 @@ public class LoadControllerMixin {
         if (stateEvent instanceof FMLStateEvent) {
             if (stateEvent instanceof FMLConstructionEvent) {
                 if (FlareConfiguration.isStageOn(SamplingStage.CORE_MOD)) {
+                    GpuInfo.queryGpuModel(); // Earliest
                     FlareAPI.getInstance().samplerContainer().stopSampler(false, SamplingStage.CORE_MOD);
                 }
                 if (FlareConfiguration.isStageOn(SamplingStage.CONSTRUCTION)) {
