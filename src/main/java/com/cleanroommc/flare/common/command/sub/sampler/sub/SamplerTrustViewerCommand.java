@@ -38,7 +38,7 @@ public class SamplerTrustViewerCommand extends FlareSubCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        Set<String> ids = getArgValues(args, "id");
+        Set<String> ids = CommandOptions.ID.getValue(args);
         if (ids.isEmpty()) {
             sendMessage(sender, LangKeys.SAMPLER_VIEWER_ID_NOT_PROVIDED);
             return;

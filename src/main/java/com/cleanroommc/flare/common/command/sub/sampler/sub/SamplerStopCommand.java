@@ -54,9 +54,9 @@ public class SamplerStopCommand extends FlareSubCommand {
                 samplerContainer.stopSampler(true);
                 return;
             }
-            final String comment = getArgValue(args, "comment");
-            final boolean separateParentCalls = hasArg(args, "separate-parent-calls");
-            final boolean saveToFile = hasArg(args, "save-to-file");
+            final String comment = CommandOptions.COMMENT.getValue(args);
+            final boolean separateParentCalls = CommandOptions.SEPARATE_PARENT_CALLS.hasIn(args);
+            final boolean saveToFile = CommandOptions.SAVE_TO_FILE.hasIn(args);
             ExportProps exportProps = samplerContainer.getExportProps();
             ExportProps.setDefault(this.flare, exportProps);
             if (comment != null) {

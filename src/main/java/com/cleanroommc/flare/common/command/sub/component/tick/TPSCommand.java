@@ -50,7 +50,7 @@ public class TPSCommand extends FlareSubCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        String type = getArgValue(args, "type");
+        String type = CommandOptions.TYPE.getValue(args);
         if (type == null) {
             type = "all";
         }

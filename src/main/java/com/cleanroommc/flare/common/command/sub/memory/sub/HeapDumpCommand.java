@@ -59,10 +59,10 @@ public class HeapDumpCommand extends FlareSubCommand {
         sendMessage(sender, LangKeys.HEAP_DUMP_WAIT);
         try {
             Files.createDirectories(heapDumpDir);
-            if (hasArg(args, "run-gc-first")) {
+            if (CommandOptions.RUN_GC_FIRST.hasIn(args)) {
                 System.gc();
             }
-            HeapDump.dumpHeap(heapDumpFile, !hasArg(args, "include-non-live"));
+            HeapDump.dumpHeap(heapDumpFile, !CommandOptions.INCLUDE_NON_LIVE.hasIn(args));
             sendMessage(sender, LangKeys.HEAP_DUMP_REPORT, text ->
                 text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, heapDumpFile.toFile().getAbsolutePath())),
                     heapDumpFile.getFileName());
@@ -72,7 +72,7 @@ public class HeapDumpCommand extends FlareSubCommand {
             return;
         }
 
-        if (hasArg(args, "compress")) {
+        if (CommandOptions.COMPRESS.hasIn(args)) {
             sendMessage(sender, LangKeys.COMPRESS_FILE_START, "heap dump");
             try {
                 long size = Files.size(heapDumpFile);

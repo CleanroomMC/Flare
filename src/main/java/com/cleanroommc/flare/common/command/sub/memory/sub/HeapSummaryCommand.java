@@ -51,7 +51,7 @@ public class HeapSummaryCommand extends FlareSubCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        if (hasArg(args, "run-gc-first")) {
+        if (CommandOptions.RUN_GC_FIRST.hasIn(args)) {
             System.gc();
         }
         sendMessage(sender, LangKeys.HEAP_SUMMARY_WAIT);
@@ -64,7 +64,7 @@ public class HeapSummaryCommand extends FlareSubCommand {
             return;
         }
         HeapData heapData = ProtoUtil.getHeapDataProto(this.flare, sender, heapDump);
-        boolean saveLocally = hasArg(args, "save-locally");
+        boolean saveLocally = CommandOptions.SAVE_LOCALLY.hasIn(args);
         if (!saveLocally) {
             try {
                 String key = this.flare.bytebinClient().postContent(BytebinClient.FLARE_HEAP_MEDIA_TYPE, heapData);

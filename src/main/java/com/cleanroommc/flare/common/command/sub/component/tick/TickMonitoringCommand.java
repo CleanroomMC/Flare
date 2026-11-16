@@ -61,7 +61,7 @@ public class TickMonitoringCommand extends FlareSubCommand {
         TickRoutine tickRoutine = this.flare.tickRoutine(side);
 
         ReportPredicate reportPredicate = null;
-        String thresholdArg = getArgValue(args, "threshold");
+        String thresholdArg = CommandOptions.THRESHOLD.getValue(args);
         if (thresholdArg != null) {
             try {
                 reportPredicate = new ReportPredicate.PercentageChangeGt(Integer.parseInt(thresholdArg));
@@ -69,7 +69,7 @@ public class TickMonitoringCommand extends FlareSubCommand {
                 sendMessage(sender, LangKeys.MALFORMED_INPUTS, "threshold");
             }
         } else {
-            String thresholdTickArg = getArgValue(args, "threshold-tick");
+            String thresholdTickArg = CommandOptions.THRESHOLD_TICK.getValue(args);
             if (thresholdTickArg != null) {
                 try {
                     reportPredicate = new ReportPredicate.DurationGt(Integer.parseInt(thresholdTickArg));
@@ -82,7 +82,7 @@ public class TickMonitoringCommand extends FlareSubCommand {
             reportPredicate = new ReportPredicate.PercentageChangeGt(100);
         }
 
-        this.activeTickMonitor = new TickMonitor(this.flare, this.side, TickType.ALL, tickRoutine, reportPredicate, hasArg(args, "without-gc"));
+        this.activeTickMonitor = new TickMonitor(this.flare, this.side, TickType.ALL, tickRoutine, reportPredicate, CommandOptions.WITHOUT_GC.hasIn(args));
         this.activeTickMonitor.start(sender);
     }
 
