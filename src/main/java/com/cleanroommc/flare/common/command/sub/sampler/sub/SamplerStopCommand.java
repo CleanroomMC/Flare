@@ -3,12 +3,18 @@ package com.cleanroommc.flare.common.command.sub.sampler.sub;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.sampler.Sampler;
 import com.cleanroommc.flare.api.sampler.SamplerContainer;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.sampler.ExportProps;
 import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 public class SamplerStopCommand extends FlareSubCommand {
 
@@ -30,6 +36,13 @@ public class SamplerStopCommand extends FlareSubCommand {
             return "/flare sampler cancel";
         }
         return "/flare sampler stop [--arguments]";
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return this.cancel ? Collections.emptyList() :
+                CommandOptions.buildTabCompletion(args, CommandOptions.COMMENT, CommandOptions.SAVE_TO_FILE,
+                        CommandOptions.SEPARATE_PARENT_CALLS);
     }
 
     @Override

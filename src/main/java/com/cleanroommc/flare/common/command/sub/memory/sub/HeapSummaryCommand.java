@@ -2,6 +2,7 @@ package com.cleanroommc.flare.common.command.sub.memory.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.content.BytebinClient;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDumpSummary;
 import com.cleanroommc.flare.proto.FlareHeapProtos.HeapData;
@@ -9,9 +10,11 @@ import com.cleanroommc.flare.util.LangKeys;
 import com.cleanroommc.flare.util.ProtoUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.ClickEvent.Action;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,6 +42,11 @@ public class HeapSummaryCommand extends FlareSubCommand {
     @Override
     public String getUsage(ICommandSender sender) {
         return "/flare heap summary [--save-locally], [--run-gc-first]";
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.SAVE_LOCALLY, CommandOptions.RUN_GC_FIRST);
     }
 
     @Override

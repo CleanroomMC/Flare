@@ -1,6 +1,7 @@
 package com.cleanroommc.flare.common.command.sub.memory.sub;
 
 import com.cleanroommc.flare.api.FlareAPI;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.memory.heap.dump.HeapDump;
 import com.cleanroommc.flare.util.FormatUtil;
@@ -8,8 +9,10 @@ import com.cleanroommc.flare.util.LangKeys;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.event.ClickEvent;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -41,6 +44,11 @@ public class HeapDumpCommand extends FlareSubCommand {
     @Override
     public String getUsage(ICommandSender sender) {
         return "/flare heap dump [--run-gc-first], [--include-non-live], [--compress]";
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return CommandOptions.buildTabCompletion(args, CommandOptions.RUN_GC_FIRST, CommandOptions.INCLUDE_NON_LIVE, CommandOptions.COMPRESS);
     }
 
     @Override

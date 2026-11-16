@@ -3,6 +3,7 @@ package com.cleanroommc.flare.common.command.sub.component;
 import com.cleanroommc.flare.api.FlareAPI;
 import com.cleanroommc.flare.api.tick.TickStatistics;
 import com.cleanroommc.flare.api.tick.TickType;
+import com.cleanroommc.flare.common.command.sub.CommandOptions;
 import com.cleanroommc.flare.common.command.sub.FlareSubCommand;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
 import com.cleanroommc.flare.common.component.disk.DiskUsage;
@@ -46,7 +47,7 @@ public class HealthCommand extends FlareSubCommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return Arrays.asList("--memory", "--network");
+        return CommandOptions.buildTabCompletion(args, CommandOptions.MEMORY, CommandOptions.NETWORK);
     }
 
     @Override
