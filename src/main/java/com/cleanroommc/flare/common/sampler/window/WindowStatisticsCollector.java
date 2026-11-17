@@ -7,6 +7,7 @@ import com.cleanroommc.flare.api.tick.TickStatistics;
 import com.cleanroommc.flare.api.tick.TickType;
 import com.cleanroommc.flare.api.util.DoubleAverageInfo;
 import com.cleanroommc.flare.common.component.cpu.CpuMonitor;
+import com.cleanroommc.flare.common.sampler.SamplingStage;
 import com.cleanroommc.flare.proto.FlareProtos;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -33,12 +34,15 @@ public class WindowStatisticsCollector {
     /** Map of profiling window -> statistics */
     private final Map<Integer, FlareProtos.WindowStatistics> stats;
 
+    private final boolean allowFMLCall;
+
     private TickCounter tickCounter;
 
     public WindowStatisticsCollector(FlareAPI flare, Side side) {
         this.flare = flare;
         this.side = side;
         this.stats = new ConcurrentHashMap<>();
+        this.allowFMLCall = this.flare.samplerContainer().stage() != SamplingStage.CORE_MOD;
     }
 
     /**
@@ -164,7 +168,7 @@ public class WindowStatisticsCollector {
         builder.setCpuProcess(CpuMonitor.processLoad1MinAvg());
         builder.setCpuSystem(CpuMonitor.systemLoad1MinAvg());
 
-        if (this.flare.server() != null) {
+        if (allowFMLCall && this.flare.server() != null) {
             builder.setPlayers(this.flare.players().size());
             builder.setEntities(this.flare.entities().size());
             builder.setTileEntities(this.flare.tileEntities().size());
