@@ -3,6 +3,7 @@
  */
 
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
@@ -10,10 +11,10 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
-    id 'com.gtnewhorizons.retrofuturagradle' version '2.0.2'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.4.1'
+    id 'com.gtnewhorizons.retrofuturagradle' version '2.0.3'
     id 'com.google.protobuf' version '0.9.4'
-    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
+    id 'net.darkhax.curseforgegradle' version '1.+' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'org.jetbrains.changelog' version '2.5.0'
 }
@@ -43,6 +44,7 @@ setDefaultProperty 'minecraft_username', true, 'Developer'
 setDefaultProperty 'extra_jvm_args', false, ''
 setDefaultProperty 'extra_tweak_classes', false, ''
 setDefaultProperty 'change_minecraft_sources', false, false
+setDefaultProperty 'publish_to_curseforge', true, false
 
 version = propertyString('mod_version')
 group = propertyString('root_package')
@@ -51,11 +53,13 @@ base {
     archivesName.set(propertyString('mod_id'))
 }
 
-tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
+tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources') || !layout.buildDirectory.dir('rfg/minecraft-src').get().asFile.exists()
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(propertyBool('use_modern_java_syntax') ? 16 : 8))
+        // Azul covers the most platforms for Java 8 toolchains, crucially including MacOS arm64
+        vendor.set(JvmVendorSpec.AZUL)
     }
     if (propertyBool('generate_sources_jar')) {
         withSourcesJar()
@@ -219,6 +223,9 @@ idea {
     project {
         settings {
             runConfigurations {
+                "0. Setup Decomp Workspace"(Gradle) {
+                    taskNames = ["setupDecompWorkspace"]
+                }
                 "1. Run Client"(Gradle) {
                     taskNames = ["runClient"]
                 }
@@ -294,6 +301,7 @@ tasks.withType(JavaCompile).configureEach {
         options.release.set(8)
         javaCompiler.set(javaToolchains.compilerFor {
             languageVersion.set(JavaLanguageVersion.of(16))
+            vendor.set(JvmVendorSpec.AZUL)
         })
     }
 }
@@ -334,6 +342,15 @@ tasks.register('prioritizeCoremods') {
 idea.project.settings {
     taskTriggers {
         afterSync 'cleanroomAfterSync'
+    }
+}
+
+if (propertyBool('publish_to_curseforge')) {
+    assertProperty 'curseforge_project_id'
+    apply plugin: 'net.darkhax.curseforgegradle'
+    tasks.register('curseforge', TaskPublishCurseForge) {
+        group 'publishing'
+        description "Uploads CurseForge project ${propertyString('curseforge_project_id')}"
     }
 }
 
