@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.0] - 2026-11-18
+
+### Added
+- Tab completion for command options
+- Added mcmod.info to allow MultiMC-variant launchers to read Flare metadata
+
+### Changed
+- Required command option values are now validated against specific conditions before the command is executed.
+
+### Fixed
+- Sampler builder doesn't respect user setting on force using Java sampler
+- Timeout sampler doesn't upload (save to disk) after completed
+- CoreMod stage sampler queued GPU model before FMLConstructionEvent
+- Export props didn't properly copy over off-main thread
+- FMLCommonHandler was called early during CoreMod stage sampler
+
 ## [0.8.0] - 2026-04-02
 
 ### Added
