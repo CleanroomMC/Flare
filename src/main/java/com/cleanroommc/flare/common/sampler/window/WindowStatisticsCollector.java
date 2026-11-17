@@ -42,7 +42,8 @@ public class WindowStatisticsCollector {
         this.flare = flare;
         this.side = side;
         this.stats = new ConcurrentHashMap<>();
-        this.allowFMLCall = this.flare.samplerContainer().stage() != SamplingStage.CORE_MOD;
+        this.allowFMLCall = this.flare.samplerContainer().stage() != SamplingStage.GAME_LOAD
+                && this.flare.samplerContainer().stage() != SamplingStage.CORE_MOD;
     }
 
     /**
