@@ -99,7 +99,7 @@ public class CommandOptions {
             Preconditions.checkArgument(expected != null, "%s: expected value should not be null", this.arg);
             for (int i = 0; i < arguments.length; i++) {
                 if (arguments[i].equalsIgnoreCase(this.arg)) {
-                    if (i == arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
                         if (expected.length <= 1) {
                             throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
                         } else {
@@ -139,7 +139,7 @@ public class CommandOptions {
         public Set<String> getValue(String[] arguments) throws CommandException {
             for (int i = 0; i < arguments.length; i++) {
                 if (arguments[i].equalsIgnoreCase(arg)) {
-                    if (i == arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
                         throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
                     }
                     return new ObjectOpenHashSet<>(Arrays.asList(arguments[i + 1].split(",")));
@@ -159,7 +159,7 @@ public class CommandOptions {
         public int getValue(String[] arguments) throws CommandException {
             for (int i = 0; i < arguments.length; i++) {
                 if (arguments[i].equalsIgnoreCase(arg)) {
-                    if (i == arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
                         throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
                     }
                     try {
