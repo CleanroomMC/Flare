@@ -150,7 +150,7 @@ public class SamplerStartCommand extends FlareSubCommand {
         }
     }
 
-    private void setExportProps(ExportProps exportProps, ICommandSender sender, String[] args) {
+    private void setExportProps(ExportProps exportProps, ICommandSender sender, String[] args) throws CommandException {
         exportProps.creator(sender)
                 .separateParentCalls(CommandOptions.SEPARATE_PARENT_CALLS.hasIn(args))
                 .saveToFile(CommandOptions.SAVE_TO_FILE.hasIn(args));

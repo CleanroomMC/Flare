@@ -1,7 +1,10 @@
 package com.cleanroommc.flare.common.command.sub;
 
+import com.cleanroommc.flare.util.LangKeys;
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,11 +25,9 @@ public class CommandOptions {
     public static final StandaloneOption SEPARATE_PARENT_CALLS = new StandaloneOption("separate-parent-calls");
     public static final StandaloneOption SAVE_TO_FILE = new StandaloneOption("save-to-file");
 
-    public static final StringOption TYPE = new StringOption("type");
-    public static final StringOption THRESHOLD = new StringOption("threshold");
-    public static final StringOption THRESHOLD_TICK = new StringOption("threshold-tick");
-    public static final StringOption THREAD_GROUPER = new StringOption("thread-grouper");
-    public static final StringOption COMMENT = new StringOption("comment");
+    public static final StringOption TYPE = new StringOption("type", "all", "render", "world", "player");
+    public static final StringOption THREAD_GROUPER = new StringOption("thread-grouper", "combine-all", "not-combined");
+    public static final StringOption COMMENT = new StringOption("comment", "<comment>").skipExpected();
 
     public static final StringListOption THREAD = new StringListOption("thread");
     public static final StringListOption REGEX = new StringListOption("regex");
@@ -35,21 +36,21 @@ public class CommandOptions {
     public static final IntegerOption TIMEOUT = new IntegerOption("timeout");
     public static final IntegerOption INTERVAL = new IntegerOption("interval");
     public static final IntegerOption ONLY_TICKS_OVER = new IntegerOption("only-ticks-over");
+    public static final IntegerOption THRESHOLD = new IntegerOption("threshold");
+    public static final IntegerOption THRESHOLD_TICK = new IntegerOption("threshold-tick");
 
     public static abstract class Option {
 
         public static final String argPrefix = "--";
 
+        private static final String[] empty = new String[0];
+
         final String arg;
-        final String expected;
+        final String[] expected;
 
-        private Option(String arg) {
-            this(arg, null);
-        }
-
-        private Option(String arg, String expected) {
+        private Option(String arg, String... expected) {
             this.arg = argPrefix + arg;
-            this.expected = "[" + expected + "]";
+            this.expected = expected.length > 0 ? expected : empty;
         }
 
         public boolean isLast(String[] arguments) {
@@ -79,24 +80,47 @@ public class CommandOptions {
 
     public static final class StringOption extends Option {
 
-        private StringOption(String name) {
-            super(name, "value");
+        private boolean skipExpected = false;
+
+        private StringOption(String name, String... expected) {
+            super(name, expected);
         }
 
-        public String getValue(String[] arguments) {
-            boolean foundArg = false;
-            for (String argument : arguments) {
-                if (foundArg) {
-                    if (argument.startsWith(argPrefix)) {
-                        break;
+        public StringOption skipExpected() {
+            skipExpected = true;
+            return this;
+        }
+
+        public String getValue(String[] arguments) throws CommandException {
+            return getValue(arguments, this.expected);
+        }
+
+        public String getValue(String[] arguments, String... expected) throws CommandException {
+            Preconditions.checkArgument(expected != null, "%s: expected value should not be null", this.arg);
+            for (int i = 0; i < arguments.length; i++) {
+                if (arguments[i].equalsIgnoreCase(this.arg)) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                        if (expected.length <= 1) {
+                            throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
+                        } else {
+                            throw new InvalidOptionException(LangKeys.MALFORMED_FLAGS.langKey, this.arg, String.join(", ", expected));
+                        }
                     }
-                    return argument;
-                }
-                if (argument.equalsIgnoreCase(arg)) {
-                    foundArg = true;
+
+                    if (skipExpected) {
+                        return arguments[i + 1];
+                    }
+
+                    for (String v: expected) {
+                        if (arguments[i + 1].equalsIgnoreCase(v)) {
+                            return arguments[i + 1];
+                        }
+                    }
+
+                    throw new InvalidOptionException(LangKeys.EXPECTED_INPUTS.langKey, this.arg, String.join(", ", expected));
                 }
             }
-            // TODO: send command when flag is found but no arg values are found
+
             return null;
         }
 
@@ -104,24 +128,23 @@ public class CommandOptions {
 
     public static final class StringListOption extends Option {
 
-        private StringListOption(String name) {
-            super(name, "s1,s2,...");
+        private StringListOption(String name, String expected) {
+            super(name, expected);
         }
 
-        public Set<String> getValue(String[] arguments) {
-            boolean foundArg = false;
-            for (String argument : arguments) {
-                if (foundArg) {
-                    if (argument.startsWith(argPrefix)) {
-                        break;
+        private StringListOption(String name) {
+            this(name, "<s1,s2,...>");
+        }
+
+        public Set<String> getValue(String[] arguments) throws CommandException {
+            for (int i = 0; i < arguments.length; i++) {
+                if (arguments[i].equalsIgnoreCase(arg)) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                        throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
                     }
-                    return new ObjectOpenHashSet<>(Arrays.asList(argument.split(",")));
-                }
-                if (argument.equalsIgnoreCase(arg)) {
-                    foundArg = true;
+                    return new ObjectOpenHashSet<>(Arrays.asList(arguments[i + 1].split(",")));
                 }
             }
-            // TODO: send command when flag is found but no arg values are found
             return Collections.emptySet();
         }
 
@@ -130,25 +153,22 @@ public class CommandOptions {
     public static final class IntegerOption extends Option {
 
         private IntegerOption(String name) {
-            super(name, "number");
+            super(name, "<number>");
         }
 
-        public int getValue(String[] arguments) {
-            boolean foundArg = false;
-            for (String argument : arguments) {
-                if (foundArg) {
+        public int getValue(String[] arguments) throws CommandException {
+            for (int i = 0; i < arguments.length; i++) {
+                if (arguments[i].equalsIgnoreCase(arg)) {
+                    if (i >= arguments.length - 1 || arguments[i + 1].startsWith(argPrefix) || arguments[i + 1].isEmpty()) {
+                        throw new InvalidOptionException(LangKeys.NO_INPUTS.langKey, this.arg);
+                    }
                     try {
-                        return Integer.parseInt(argument);
+                        return Integer.parseInt(arguments[i + 1]);
                     } catch (NumberFormatException ignored) {
-                        // TODO: send command when flag is found but arg is malformed
-                        break;
+                        throw new InvalidOptionException(LangKeys.MALFORMED_INPUTS.langKey, this.arg);
                     }
                 }
-                if (argument.equalsIgnoreCase(arg)) {
-                    foundArg = true;
-                }
             }
-            // TODO: send command when flag is found but no arg values are found
             return -1;
         }
 
@@ -162,7 +182,7 @@ public class CommandOptions {
 
         for (Option option: commandOptions) {
             if (option.isLast(arguments) && !(option instanceof StandaloneOption)) {
-                return Collections.singletonList(option.expected);
+                return Arrays.asList(option.expected);
             }
         }
 
@@ -172,4 +192,13 @@ public class CommandOptions {
             .map(option -> option.arg)
             .collect(Collectors.toList());
     }
+
+    private static final class InvalidOptionException extends CommandException {
+
+        public InvalidOptionException(String message, Object... objects) {
+            super(message, objects);
+        }
+
+    }
+
 }
