@@ -61,21 +61,13 @@ public class TickMonitoringCommand extends FlareSubCommand {
         TickRoutine tickRoutine = this.flare.tickRoutine(side);
 
         ReportPredicate reportPredicate = null;
-        String thresholdArg = CommandOptions.THRESHOLD.getValue(args);
-        if (thresholdArg != null) {
-            try {
-                reportPredicate = new ReportPredicate.PercentageChangeGt(Integer.parseInt(thresholdArg));
-            } catch (NumberFormatException e) {
-                sendMessage(sender, LangKeys.MALFORMED_INPUTS, "threshold");
-            }
+        int threshold = CommandOptions.THRESHOLD.getValue(args);
+        if (threshold != -1) {
+            reportPredicate = new ReportPredicate.PercentageChangeGt(threshold);
         } else {
-            String thresholdTickArg = CommandOptions.THRESHOLD_TICK.getValue(args);
-            if (thresholdTickArg != null) {
-                try {
-                    reportPredicate = new ReportPredicate.DurationGt(Integer.parseInt(thresholdTickArg));
-                } catch (NumberFormatException e) {
-                    sendMessage(sender, LangKeys.MALFORMED_INPUTS, "threshold-tick");
-                }
+            int thresholdTick = CommandOptions.THRESHOLD_TICK.getValue(args);
+            if (thresholdTick != -1) {
+                reportPredicate = new ReportPredicate.DurationGt(thresholdTick);
             }
         }
         if (reportPredicate == null) {

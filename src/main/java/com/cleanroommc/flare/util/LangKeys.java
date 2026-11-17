@@ -81,6 +81,7 @@ public enum LangKeys {
     ERROR("flare.message.error", "Errored LangKey Entry. Report on GitHub!"),
     MALFORMED_FLAGS("flare.message.error.malformed_flags", "Malformed flags used in conjunction with this command, these are the available flags: [%s]"),
     MALFORMED_INPUTS("flare.message.error.malformed_inputs", "Malformed inputs used in conjunction with the flag: [%s], please refer to the usages."),
+    EXPECTED_INPUTS("flare.message.error.expected_inputs", "Malformed inputs used in conjunction with the flag: [%s], these are the available inputs: [%s]"),
     NO_INPUTS("flare.message.error.no_inputs", "No inputs used in conjunction with the flag: [%s], please refer to the usages."),
     CANNOT_UPLOAD_SAVE_TO_DISK_INSTEAD("flare.message.error.cannot_upload_save_to_disk_instead", "An error occurred whilst uploading the data. Attempting to save to disk instead."),
     CANNOT_SAVE_TO_DISK("flare.message.error.cannot_save_to_disk", "An error occurred whilst saving the data."),
@@ -88,7 +89,7 @@ public enum LangKeys {
 
     ;
 
-    final String langKey, defaultText;
+    public final String langKey, defaultText;
 
     LangKeys(String langKey, String defaultText) {
         this.langKey = langKey;
