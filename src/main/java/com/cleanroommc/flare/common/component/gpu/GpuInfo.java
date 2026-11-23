@@ -1,21 +1,20 @@
 package com.cleanroommc.flare.common.component.gpu;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 public final class GpuInfo {
 
-    private static boolean init;
-    private static String model;
+    private static volatile String model;
+
+    @SideOnly(Side.CLIENT)
+    public static void captureGpuModel() {
+        model = GlStateManager.glGetString(GL11.GL_RENDERER);
+    }
 
     public static String queryGpuModel() {
-        if (!init) {
-            if (FMLLaunchHandler.side().isClient()) {
-                model = GlStateManager.glGetString(GL11.GL_RENDERER);
-            }
-            init = true;
-        }
         return model;
     }
 

@@ -8,6 +8,7 @@ import com.cleanroommc.flare.common.sampler.SamplingStage;
 import com.cleanroommc.flare.util.DefaultSampler;
 import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +25,10 @@ public class LoadControllerMixin {
     private void injectBeforeDistributingState(FMLEvent stateEvent, CallbackInfo ci) {
         if (stateEvent instanceof FMLStateEvent) {
             if (stateEvent instanceof FMLConstructionEvent) {
+                if (FMLLaunchHandler.side().isClient()) {
+                    GpuInfo.captureGpuModel();
+                }
                 if (FlareConfiguration.isStageOn(SamplingStage.CORE_MOD)) {
-                    GpuInfo.queryGpuModel(); // Earliest
                     FlareAPI.getInstance().samplerContainer().stopSampler(false, SamplingStage.CORE_MOD);
                 }
                 if (FlareConfiguration.isStageOn(SamplingStage.CONSTRUCTION)) {
