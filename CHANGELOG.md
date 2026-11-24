@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.1] - 2026-11-24
+
+### Fixed
+- GPU model query on server thread.
+
 ## [0.9.0] - 2026-11-18
 
 ### Added
